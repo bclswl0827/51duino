@@ -1,0 +1,73 @@
+{
+    "name": "example",
+    "target": "Debug",
+    "toolchain": "SDCC",
+    "toolchainLocation": "/home/yuki/.platformio/packages/toolchain-sdcc",
+    "toolchainCfgFile": "../cfg/sdcc.model.json",
+    "buildMode": "fast|multhread",
+    "showRepathOnLog": true,
+    "threadNum": 8,
+    "rootDir": "/home/yuki/51duino",
+    "dumpPath": "build/Debug",
+    "outDir": "build/Debug",
+    "incDirs": [
+        "src",
+        "src/modules",
+        "inc",
+        "inc/modules"
+    ],
+    "libDirs": [],
+    "defines": [],
+    "sourceList": [
+        "src/main.c",
+        "src/modules/delay.c",
+        "src/modules/digi.c",
+        "src/modules/millis.c",
+        "src/modules/ttl.c",
+        "src/modules/wire.c"
+    ],
+    "sourceParams": {},
+    "sourceParamsMtime": 1664351243819.432,
+    "options": {
+        "version": 3,
+        "beforeBuildTasks": [],
+        "afterBuildTasks": [],
+        "global": {
+            "device": "mcs51",
+            "optimize-type": "size",
+            "misc-controls": "--iram-size 256 --xram-size 0 --code-size 8192",
+            "out-debug-info": true
+        },
+        "c/cpp-compiler": {
+            "language-c": "sdcc11"
+        },
+        "asm-compiler": {
+            "$toolName": "sdas8051"
+        },
+        "linker": {
+            "$mainFileName": "main",
+            "output-format": "hex"
+        }
+    },
+    "env": {
+        "workspaceFolder": "/home/yuki/51duino",
+        "workspaceFolderBasename": "51duino",
+        "OutDir": "/home/yuki/51duino/build/Debug",
+        "OutDirRoot": "build",
+        "OutDirBase": "build/Debug",
+        "ProjectName": "example",
+        "ConfigName": "Debug",
+        "ProjectRoot": "/home/yuki/51duino",
+        "ExecutableName": "/home/yuki/51duino/build/Debug/example",
+        "ToolchainRoot": "/home/yuki/.platformio/packages/toolchain-sdcc"
+    },
+    "sha": {
+        "c/cpp-defines": "d751713988987e9331980363e24189ce",
+        "beforeBuildTasks": "d751713988987e9331980363e24189ce",
+        "afterBuildTasks": "d751713988987e9331980363e24189ce",
+        "global": "b08f85a51063ee31079724eea2ab81ba",
+        "c/cpp-compiler": "5074ce178a206c5f0936894be2342968",
+        "asm-compiler": "ed0cbf2f00f079904d4f634eb986c327",
+        "linker": "d9e14929ad9416d382e45b49ec9fbdcf"
+    }
+}

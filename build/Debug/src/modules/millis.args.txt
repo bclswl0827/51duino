@@ -1,1 +1,0 @@
--c --std-sdcc11 -Isrc -Isrc/modules -Iinc -Iinc/modules -mmcs51 --opt-code-size --debug --iram-size 256 --xram-size 0 --code-size 8192 -MMD -o ./build/Debug/src/modules/millis.rel ./src/modules/millis.c

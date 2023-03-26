@@ -1,5 +1,5 @@
 {
-    "name": "example",
+    "name": "Nixie_Clock",
     "target": "Debug",
     "toolchain": "SDCC",
     "toolchainLocation": "/home/yuki/.platformio/packages/toolchain-sdcc",
@@ -7,27 +7,32 @@
     "buildMode": "fast|multhread",
     "showRepathOnLog": true,
     "threadNum": 8,
-    "rootDir": "/home/yuki/51duino",
+    "rootDir": "/home/yuki/Devel/boards/LCD1602",
     "dumpPath": "build/Debug",
     "outDir": "build/Debug",
     "incDirs": [
         "src",
-        "src/modules",
+        "src/module",
+        "src/framework",
         "inc",
-        "inc/modules"
+        "inc/modules",
+        "inc/framework"
     ],
     "libDirs": [],
     "defines": [],
     "sourceList": [
+        "src/framework/analog.c",
+        "src/framework/delay.c",
+        "src/framework/digital.c",
+        "src/framework/stream.c",
+        "src/framework/uptime.c",
+        "src/framework/wire.c",
         "src/main.c",
-        "src/modules/delay.c",
-        "src/modules/digi.c",
-        "src/modules/millis.c",
-        "src/modules/ttl.c",
-        "src/modules/wire.c"
+        "src/module/lcd.c",
+        "src/module/rtc.c"
     ],
     "sourceParams": {},
-    "sourceParamsMtime": 1664351243819.432,
+    "sourceParamsMtime": 1665507750000,
     "options": {
         "version": 3,
         "beforeBuildTasks": [],
@@ -50,15 +55,15 @@
         }
     },
     "env": {
-        "workspaceFolder": "/home/yuki/51duino",
-        "workspaceFolderBasename": "51duino",
-        "OutDir": "/home/yuki/51duino/build/Debug",
+        "workspaceFolder": "/home/yuki/Devel/boards/LCD1602",
+        "workspaceFolderBasename": "LCD1602",
+        "OutDir": "/home/yuki/Devel/boards/LCD1602/build/Debug",
         "OutDirRoot": "build",
         "OutDirBase": "build/Debug",
-        "ProjectName": "example",
+        "ProjectName": "Nixie_Clock",
         "ConfigName": "Debug",
-        "ProjectRoot": "/home/yuki/51duino",
-        "ExecutableName": "/home/yuki/51duino/build/Debug/example",
+        "ProjectRoot": "/home/yuki/Devel/boards/LCD1602",
+        "ExecutableName": "/home/yuki/Devel/boards/LCD1602/build/Debug/Nixie_Clock",
         "ToolchainRoot": "/home/yuki/.platformio/packages/toolchain-sdcc"
     },
     "sha": {

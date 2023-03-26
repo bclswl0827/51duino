@@ -1,26 +1,40 @@
-#include <51duino.h>
-#include <stdint.h>
+#include <lcd.h>
+#include <rtc.h>
+#include <stream.h>
 
-#define dat PIN_P15
-#define latch PIN_P16
-#define clock PIN_P17
+void main() {
+    TimeData time;
 
-void setup() {
-    Serial.begin(9600);
-}
+    SerialBegin(9600);
 
-void loop() {
-    Serial.println("Hello World!");
-    code uint8_t lights[] = {
-        0b00000000, 0b00000001, 0b00000011, 0b00000111, 0b00001111, 0b00011111,
-        0b00111111, 0b01111111, 0b11111111, 0b01111111, 0b00111111, 0b00011111,
-        0b00001111, 0b00000111, 0b00000011, 0b00000001, 0b10000000, 0b11000000,
-        0b11100000, 0b11110000, 0b11111000, 0b11111100, 0b11111110, 0b11111111,
-        0b11111110, 0b11111100, 0b11111000, 0b11110000, 0b11100000, 0b11000000};
-    for (uint8_t i = 0; i < sizeof(lights) / sizeof(lights[0]); i++) {
-        delay(50);
-        digitalWrite(latch, LOW);
-        shiftOut(dat, clock, MSBFIRST, lights[i]);
-        digitalWrite(latch, HIGH);
+    LcdInit();
+    LcdClear();
+
+    setTime(23, 3, 26, 18, 45, 10, 6);
+
+    while (1) {
+        SerialPrintln("Test123...");
+
+        getTime(&time);
+
+        LcdChar(0, 0, '2');
+        LcdChar(1, 0, '0');
+        LcdChar(2, 0, time.year / 10 + '0');
+        LcdChar(3, 0, time.year % 10 + '0');
+        LcdChar(4, 0, '-');
+        LcdChar(5, 0, time.month / 10 + '0');
+        LcdChar(6, 0, time.month % 10 + '0');
+        LcdChar(7, 0, '-');
+        LcdChar(8, 0, time.day / 10 + '0');
+        LcdChar(9, 0, time.day % 10 + '0');
+
+        LcdChar(0, 1, time.hour / 10 + '0');
+        LcdChar(1, 1, time.hour % 10 + '0');
+        LcdChar(2, 1, ':');
+        LcdChar(3, 1, time.minute / 10 + '0');
+        LcdChar(4, 1, time.minute % 10 + '0');
+        LcdChar(5, 1, ':');
+        LcdChar(6, 1, time.second / 10 + '0');
+        LcdChar(7, 1, time.second % 10 + '0');
     }
 }

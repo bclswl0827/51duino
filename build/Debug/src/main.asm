@@ -8,55 +8,14 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _loop_lights_65537_66
-	.globl _PIN_P37
-	.globl _PIN_P36
-	.globl _PIN_P35
-	.globl _PIN_P34
-	.globl _PIN_P33
-	.globl _PIN_P32
-	.globl _PIN_P31
-	.globl _PIN_P30
-	.globl _PIN_P27
-	.globl _PIN_P26
-	.globl _PIN_P25
-	.globl _PIN_P24
-	.globl _PIN_P23
-	.globl _PIN_P22
-	.globl _PIN_P21
-	.globl _PIN_P20
-	.globl _PIN_P17
-	.globl _PIN_P16
-	.globl _PIN_P15
-	.globl _PIN_P14
-	.globl _PIN_P13
-	.globl _PIN_P12
-	.globl _PIN_P11
-	.globl _PIN_P10
-	.globl _PIN_P07
-	.globl _PIN_P06
-	.globl _PIN_P05
-	.globl _PIN_P04
-	.globl _PIN_P03
-	.globl _PIN_P02
-	.globl _PIN_P01
-	.globl _PIN_P00
 	.globl _main
-	.globl _SerialAvailable
-	.globl _SerialRead
 	.globl _SerialPrintln
-	.globl _SerialPrint
-	.globl _SerialWrite
-	.globl _SerialSetTimeout
-	.globl _SerialEnd
 	.globl _SerialBegin
-	.globl _SerialFlush
-	.globl _printf
-	.globl _millisInit
-	.globl _millisInterrupt
-	.globl _shiftOut
-	.globl _digitalWrite
-	.globl _delay
+	.globl _setTime
+	.globl _getTime
+	.globl _LcdChar
+	.globl _LcdInit
+	.globl _LcdClear
 	.globl _CP_RL2
 	.globl _C_T2
 	.globl _TR2
@@ -169,11 +128,6 @@
 	.globl _P2
 	.globl _P1
 	.globl _P0
-	.globl _Serial
-	.globl _uptime
-	.globl _putchar
-	.globl _setup
-	.globl _loop
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -417,17 +371,12 @@ _CP_RL2	=	0x00c8
 ; internal ram data
 ;--------------------------------------------------------
 	.area DSEG    (DATA)
-G$uptime$0_0$0==.
-_uptime::
-	.ds 4
-G$Serial$0_0$0==.
-_Serial::
-	.ds 20
+Lmain.main$time$1_0$21==.
+_main_time_65536_21:
+	.ds 7
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
 ;--------------------------------------------------------
-	.area	OSEG    (OVR,DATA)
-	.area	OSEG    (OVR,DATA)
 ;--------------------------------------------------------
 ; Stack segment in internal ram 
 ;--------------------------------------------------------
@@ -480,9 +429,6 @@ __start__stack:
 	.area HOME    (CODE)
 __interrupt_vect:
 	ljmp	__sdcc_gsinit_startup
-	reti
-	.ds	7
-	ljmp	_millisInterrupt
 ;--------------------------------------------------------
 ; global & static initialisations
 ;--------------------------------------------------------
@@ -496,35 +442,6 @@ __interrupt_vect:
 	.globl __mcs51_genXINIT
 	.globl __mcs51_genXRAMCLEAR
 	.globl __mcs51_genRAMCLEAR
-	C$millis.c$9$2_1$65 ==.
-;	src/modules/millis.c:9: uint32_t uptime = 0;
-	clr	a
-	mov	_uptime,a
-	mov	(_uptime + 1),a
-	mov	(_uptime + 2),a
-	mov	(_uptime + 3),a
-	C$ttl.h$31$2_1$65 ==.
-;	inc/modules/ttl.h:31: Stream Serial = {
-	mov	(_Serial + 0),#_SerialBegin
-	mov	(_Serial + 1),#(_SerialBegin >> 8)
-	mov	((_Serial + 0x0002) + 0),#_SerialSetTimeout
-	mov	((_Serial + 0x0002) + 1),#(_SerialSetTimeout >> 8)
-	mov	((_Serial + 0x0004) + 0),#_SerialFlush
-	mov	((_Serial + 0x0004) + 1),#(_SerialFlush >> 8)
-	mov	((_Serial + 0x0006) + 0),#_SerialEnd
-	mov	((_Serial + 0x0006) + 1),#(_SerialEnd >> 8)
-	mov	((_Serial + 0x0008) + 0),#_SerialPrint
-	mov	((_Serial + 0x0008) + 1),#(_SerialPrint >> 8)
-	mov	((_Serial + 0x000a) + 0),#_SerialPrintln
-	mov	((_Serial + 0x000a) + 1),#(_SerialPrintln >> 8)
-	mov	((_Serial + 0x000c) + 0),#_printf
-	mov	((_Serial + 0x000c) + 1),#(_printf >> 8)
-	mov	((_Serial + 0x000e) + 0),#_SerialWrite
-	mov	((_Serial + 0x000e) + 1),#(_SerialWrite >> 8)
-	mov	((_Serial + 0x0010) + 0),#_SerialRead
-	mov	((_Serial + 0x0010) + 1),#(_SerialRead >> 8)
-	mov	((_Serial + 0x0012) + 0),#_SerialAvailable
-	mov	((_Serial + 0x0012) + 1),#(_SerialAvailable >> 8)
 	.area GSFINAL (CODE)
 	ljmp	__sdcc_program_startup
 ;--------------------------------------------------------
@@ -540,15 +457,17 @@ __sdcc_program_startup:
 ;--------------------------------------------------------
 	.area CSEG    (CODE)
 ;------------------------------------------------------------
-;Allocation info for local variables in function 'millisInit'
+;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
-	G$millisInit$0$0 ==.
-	C$millis.c$12$0_0$8 ==.
-;	src/modules/millis.c:12: void millisInit() {
+;time                      Allocated with name '_main_time_65536_21'
+;------------------------------------------------------------
+	G$main$0$0 ==.
+	C$main.c$5$0_0$21 ==.
+;	./src/main.c:5: void main() {
 ;	-----------------------------------------
-;	 function millisInit
+;	 function main
 ;	-----------------------------------------
-_millisInit:
+_main:
 	ar7 = 0x07
 	ar6 = 0x06
 	ar5 = 0x05
@@ -557,744 +476,291 @@ _millisInit:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-	C$millis.c$14$1_0$8 ==.
-;	src/modules/millis.c:14: TMOD = 0x01;
-	mov	_TMOD,#0x01
-	C$millis.c$16$1_0$8 ==.
-;	src/modules/millis.c:16: TH0 = (65536 - PERIOD) / 256;
-	mov	_TH0,#0xfc
-	C$millis.c$18$1_0$8 ==.
-;	src/modules/millis.c:18: TL0 = (65536 - PERIOD) % 256;
-	mov	_TL0,#0x67
-	C$millis.c$19$1_0$8 ==.
-;	src/modules/millis.c:19: EA = ET0 = TR0 = 1;
-;	assignBit
-	setb	_TR0
-;	assignBit
-	mov	c,_TR0
-	mov	_ET0,c
-;	assignBit
-	mov	c,_ET0
-	mov	_EA,c
-	C$millis.c$20$1_0$8 ==.
-;	src/modules/millis.c:20: }
-	C$millis.c$20$1_0$8 ==.
-	XG$millisInit$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'millisInterrupt'
-;------------------------------------------------------------
-	G$millisInterrupt$0$0 ==.
-	C$millis.c$23$1_0$9 ==.
-;	src/modules/millis.c:23: void millisInterrupt() interrupt 1 {
-;	-----------------------------------------
-;	 function millisInterrupt
-;	-----------------------------------------
-_millisInterrupt:
-	push	acc
-	push	psw
-	C$millis.c$25$1_0$9 ==.
-;	src/modules/millis.c:25: TH0 = (65536 - PERIOD) / 256;
-	mov	_TH0,#0xfc
-	C$millis.c$27$1_0$9 ==.
-;	src/modules/millis.c:27: TL0 = (65536 - PERIOD) % 256;
-	mov	_TL0,#0x67
-	C$millis.c$29$1_0$9 ==.
-;	src/modules/millis.c:29: uptime++;
-	inc	_uptime
-	clr	a
-	cjne	a,_uptime,00103$
-	inc	(_uptime + 1)
-	cjne	a,(_uptime + 1),00103$
-	inc	(_uptime + 2)
-	cjne	a,(_uptime + 2),00103$
-	inc	(_uptime + 3)
-00103$:
-	C$millis.c$30$1_0$9 ==.
-;	src/modules/millis.c:30: }
-	pop	psw
-	pop	acc
-	C$millis.c$30$1_0$9 ==.
-	XG$millisInterrupt$0$0 ==.
-	reti
-;	eliminated unneeded mov psw,# (no regs used in bank)
-;	eliminated unneeded push/pop dpl
-;	eliminated unneeded push/pop dph
-;	eliminated unneeded push/pop b
-;------------------------------------------------------------
-;Allocation info for local variables in function 'millis'
-;------------------------------------------------------------
-	G$millis$0$0 ==.
-	C$millis.c$33$1_0$10 ==.
-;	src/modules/millis.c:33: uint32_t millis() {
-;	-----------------------------------------
-;	 function millis
-;	-----------------------------------------
-_millis:
-	C$millis.c$34$1_0$10 ==.
-;	src/modules/millis.c:34: return uptime;
-	mov	dpl,_uptime
-	mov	dph,(_uptime + 1)
-	mov	b,(_uptime + 2)
-	mov	a,(_uptime + 3)
-	C$millis.c$35$1_0$10 ==.
-;	src/modules/millis.c:35: }
-	C$millis.c$35$1_0$10 ==.
-	XG$millis$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialBegin'
-;------------------------------------------------------------
-;b                         Allocated to registers r6 r7 
-;------------------------------------------------------------
-	G$SerialBegin$0$0 ==.
-	C$ttl.c$6$1_0$35 ==.
-;	src/modules/ttl.c:6: void SerialBegin(uint16_t b) {
-;	-----------------------------------------
-;	 function SerialBegin
-;	-----------------------------------------
-_SerialBegin:
-	mov	r6,dpl
-	mov	r7,dph
-	C$ttl.c$8$1_0$35 ==.
-;	src/modules/ttl.c:8: PCON = 0x80;
-	mov	_PCON,#0x80
-	C$ttl.c$10$1_0$35 ==.
-;	src/modules/ttl.c:10: SCON = 0x50;
-	mov	_SCON,#0x50
-	C$ttl.c$12$1_0$35 ==.
-;	src/modules/ttl.c:12: TMOD = 0x20;
-	mov	_TMOD,#0x20
-	C$ttl.c$14$1_0$35 ==.
-;	src/modules/ttl.c:14: TH1 = TL1 = -(CRYSTAL / 12 / 32 / (b / 2));
-	mov	a,r7
-	clr	c
-	rrc	a
-	xch	a,r6
-	rrc	a
-	xch	a,r6
-	mov	r7,a
-	mov	__divslong_PARM_2,r6
-	mov	(__divslong_PARM_2 + 1),r7
-	mov	(__divslong_PARM_2 + 2),#0x00
-	mov	(__divslong_PARM_2 + 3),#0x00
-	mov	dptr,#0x7080
-	clr	a
-	mov	b,a
-	lcall	__divslong
-	mov	r4,dpl
-	clr	c
-	clr	a
-	subb	a,r4
-	mov	r4,a
-	mov	_TL1,r4
-	mov	_TH1,r4
-	C$ttl.c$16$1_0$35 ==.
-;	src/modules/ttl.c:16: TR1 = EA = ES = 1;
-;	assignBit
-	setb	_ES
-;	assignBit
-	mov	c,_ES
-	mov	_EA,c
-;	assignBit
-	mov	c,_EA
-	mov	_TR1,c
-	C$ttl.c$17$1_0$35 ==.
-;	src/modules/ttl.c:17: }
-	C$ttl.c$17$1_0$35 ==.
-	XG$SerialBegin$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialEnd'
-;------------------------------------------------------------
-	G$SerialEnd$0$0 ==.
-	C$ttl.c$20$1_0$36 ==.
-;	src/modules/ttl.c:20: void SerialEnd() {
-;	-----------------------------------------
-;	 function SerialEnd
-;	-----------------------------------------
-_SerialEnd:
-	C$ttl.c$22$1_0$36 ==.
-;	src/modules/ttl.c:22: EA = ES = 0;
-;	assignBit
-	clr	_ES
-;	assignBit
-	mov	c,_ES
-	mov	_EA,c
-	C$ttl.c$23$1_0$36 ==.
-;	src/modules/ttl.c:23: }
-	C$ttl.c$23$1_0$36 ==.
-	XG$SerialEnd$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialSetTimeout'
-;------------------------------------------------------------
-;t                         Allocated to registers r6 r7 
-;------------------------------------------------------------
-	G$SerialSetTimeout$0$0 ==.
-	C$ttl.c$26$1_0$38 ==.
-;	src/modules/ttl.c:26: void SerialSetTimeout(uint16_t t) {
-;	-----------------------------------------
-;	 function SerialSetTimeout
-;	-----------------------------------------
-_SerialSetTimeout:
-	mov	r6,dpl
-	mov	r7,dph
-	C$ttl.c$28$1_0$38 ==.
-;	src/modules/ttl.c:28: TMOD = 0x01;
-	mov	_TMOD,#0x01
-	C$ttl.c$30$1_0$38 ==.
-;	src/modules/ttl.c:30: TH0 = (t >> 8) & 0xff;
-	mov	_TH0,r7
-	C$ttl.c$31$1_0$38 ==.
-;	src/modules/ttl.c:31: TL0 = t & 0xff;
-	mov	_TL0,r6
-	C$ttl.c$33$1_0$38 ==.
-;	src/modules/ttl.c:33: TR0 = EA = ET0 = 1;
-;	assignBit
-	setb	_ET0
-;	assignBit
-	mov	c,_ET0
-	mov	_EA,c
-;	assignBit
-	mov	c,_EA
-	mov	_TR0,c
-	C$ttl.c$34$1_0$38 ==.
-;	src/modules/ttl.c:34: }
-	C$ttl.c$34$1_0$38 ==.
-	XG$SerialSetTimeout$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialFlush'
-;------------------------------------------------------------
-	G$SerialFlush$0$0 ==.
-	C$ttl.c$37$1_0$39 ==.
-;	src/modules/ttl.c:37: void SerialFlush() {
-;	-----------------------------------------
-;	 function SerialFlush
-;	-----------------------------------------
-_SerialFlush:
-	C$ttl.c$39$1_0$39 ==.
-;	src/modules/ttl.c:39: while (!TI) {
-00101$:
-	C$ttl.c$43$1_0$39 ==.
-;	src/modules/ttl.c:43: TI = 0;
-;	assignBit
-	jbc	_TI,00114$
-	sjmp	00101$
-00114$:
-	C$ttl.c$44$1_0$39 ==.
-;	src/modules/ttl.c:44: }
-	C$ttl.c$44$1_0$39 ==.
-	XG$SerialFlush$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialWrite'
-;------------------------------------------------------------
-;c                         Allocated to registers r7 
-;------------------------------------------------------------
-	G$SerialWrite$0$0 ==.
-	C$ttl.c$47$1_0$42 ==.
-;	src/modules/ttl.c:47: void SerialWrite(uint8_t c) {
-;	-----------------------------------------
-;	 function SerialWrite
-;	-----------------------------------------
-_SerialWrite:
-	mov	r7,dpl
-	C$ttl.c$49$1_0$42 ==.
-;	src/modules/ttl.c:49: ES = 0;
-;	assignBit
-	clr	_ES
-	C$ttl.c$51$1_0$42 ==.
-;	src/modules/ttl.c:51: SBUF = c;
-	mov	_SBUF,r7
-	C$ttl.c$53$1_0$42 ==.
-;	src/modules/ttl.c:53: while (!TI) {
-00101$:
-	C$ttl.c$57$1_0$42 ==.
-;	src/modules/ttl.c:57: TI = 0;
-;	assignBit
-	jbc	_TI,00114$
-	sjmp	00101$
-00114$:
-	C$ttl.c$59$1_0$42 ==.
-;	src/modules/ttl.c:59: ES = !TI;
-	mov	c,_TI
-	cpl	c
-	mov	_ES,c
-	C$ttl.c$60$1_0$42 ==.
-;	src/modules/ttl.c:60: }
-	C$ttl.c$60$1_0$42 ==.
-	XG$SerialWrite$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialPrint'
-;------------------------------------------------------------
-;s                         Allocated to registers 
-;------------------------------------------------------------
-	G$SerialPrint$0$0 ==.
-	C$ttl.c$63$1_0$45 ==.
-;	src/modules/ttl.c:63: void SerialPrint(char* s) {
-;	-----------------------------------------
-;	 function SerialPrint
-;	-----------------------------------------
-_SerialPrint:
-	mov	r5,dpl
-	mov	r6,dph
-	mov	r7,b
-	C$ttl.c$65$1_0$45 ==.
-;	src/modules/ttl.c:65: while (*s) {
-00101$:
-	mov	dpl,r5
-	mov	dph,r6
-	mov	b,r7
-	lcall	__gptrget
-	mov	r4,a
-	jz	00104$
-	C$ttl.c$66$2_0$46 ==.
-;	src/modules/ttl.c:66: SerialWrite(*s++);
-	mov	dpl,r4
-	inc	r5
-	cjne	r5,#0x00,00116$
-	inc	r6
-00116$:
-	push	ar7
-	push	ar6
-	push	ar5
-	lcall	_SerialWrite
-	pop	ar5
-	pop	ar6
-	pop	ar7
-	sjmp	00101$
-00104$:
-	C$ttl.c$68$1_0$45 ==.
-;	src/modules/ttl.c:68: }
-	C$ttl.c$68$1_0$45 ==.
-	XG$SerialPrint$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialPrintln'
-;------------------------------------------------------------
-;s                         Allocated to registers r5 r6 r7 
-;------------------------------------------------------------
-	G$SerialPrintln$0$0 ==.
-	C$ttl.c$71$1_0$48 ==.
-;	src/modules/ttl.c:71: void SerialPrintln(char* s) {
-;	-----------------------------------------
-;	 function SerialPrintln
-;	-----------------------------------------
-_SerialPrintln:
-	C$ttl.c$73$1_0$48 ==.
-;	src/modules/ttl.c:73: SerialPrint(s);
-	lcall	_SerialPrint
-	C$ttl.c$74$1_0$48 ==.
-;	src/modules/ttl.c:74: SerialPrint("\r\n");
+	C$main.c$8$1_0$21 ==.
+;	./src/main.c:8: SerialBegin(9600);
+	mov	dptr,#0x2580
+	lcall	_SerialBegin
+	C$main.c$10$1_0$21 ==.
+;	./src/main.c:10: LcdInit();
+	lcall	_LcdInit
+	C$main.c$11$1_0$21 ==.
+;	./src/main.c:11: LcdClear();
+	lcall	_LcdClear
+	C$main.c$13$1_0$21 ==.
+;	./src/main.c:13: setTime(23, 3, 26, 18, 45, 10, 6);
+	mov	_setTime_PARM_2,#0x03
+	mov	_setTime_PARM_3,#0x1a
+	mov	_setTime_PARM_4,#0x12
+	mov	_setTime_PARM_5,#0x2d
+	mov	_setTime_PARM_6,#0x0a
+	mov	_setTime_PARM_7,#0x06
+	mov	dpl,#0x17
+	lcall	_setTime
+	C$main.c$15$1_0$21 ==.
+;	./src/main.c:15: while (1) {
+00102$:
+	C$main.c$16$2_0$22 ==.
+;	./src/main.c:16: SerialPrintln("Test123...");
 	mov	dptr,#___str_0
 	mov	b,#0x80
-	lcall	_SerialPrint
-	C$ttl.c$75$1_0$48 ==.
-;	src/modules/ttl.c:75: }
-	C$ttl.c$75$1_0$48 ==.
-	XG$SerialPrintln$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialRead'
-;------------------------------------------------------------
-	G$SerialRead$0$0 ==.
-	C$ttl.c$78$1_0$49 ==.
-;	src/modules/ttl.c:78: char SerialRead() {
-;	-----------------------------------------
-;	 function SerialRead
-;	-----------------------------------------
-_SerialRead:
-	C$ttl.c$80$1_0$49 ==.
-;	src/modules/ttl.c:80: while (!RI) {
-00101$:
-	C$ttl.c$84$1_0$49 ==.
-;	src/modules/ttl.c:84: RI = 0;
-;	assignBit
-	jbc	_RI,00114$
-	sjmp	00101$
-00114$:
-	C$ttl.c$86$1_0$49 ==.
-;	src/modules/ttl.c:86: return SBUF;
-	mov	dpl,_SBUF
-	C$ttl.c$87$1_0$49 ==.
-;	src/modules/ttl.c:87: }
-	C$ttl.c$87$1_0$49 ==.
-	XG$SerialRead$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'SerialAvailable'
-;------------------------------------------------------------
-	G$SerialAvailable$0$0 ==.
-	C$ttl.c$90$1_0$51 ==.
-;	src/modules/ttl.c:90: uint8_t SerialAvailable() {
-;	-----------------------------------------
-;	 function SerialAvailable
-;	-----------------------------------------
-_SerialAvailable:
-	C$ttl.c$92$1_0$51 ==.
-;	src/modules/ttl.c:92: return RI;
-	mov	c,_RI
-	clr	a
-	rlc	a
-	mov	dpl,a
-	C$ttl.c$93$1_0$51 ==.
-;	src/modules/ttl.c:93: }
-	C$ttl.c$93$1_0$51 ==.
-	XG$SerialAvailable$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'putchar'
-;------------------------------------------------------------
-;c                         Allocated to registers r7 
-;------------------------------------------------------------
-	G$putchar$0$0 ==.
-	C$ttl.c$96$1_0$53 ==.
-;	src/modules/ttl.c:96: uint8_t putchar(uint8_t c) {
-;	-----------------------------------------
-;	 function putchar
-;	-----------------------------------------
-_putchar:
-	C$ttl.c$98$1_0$53 ==.
-;	src/modules/ttl.c:98: SerialWrite(c);
-	mov  r7,dpl
-	push	ar7
-	lcall	_SerialWrite
-	pop	ar7
-	C$ttl.c$99$1_0$53 ==.
-;	src/modules/ttl.c:99: return c;
-	mov	dpl,r7
-	C$ttl.c$100$1_0$53 ==.
-;	src/modules/ttl.c:100: }
-	C$ttl.c$100$1_0$53 ==.
-	XG$putchar$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'main'
-;------------------------------------------------------------
-	G$main$0$0 ==.
-	C$51duino.h$19$1_0$62 ==.
-;	inc/51duino.h:19: void main() {
-;	-----------------------------------------
-;	 function main
-;	-----------------------------------------
-_main:
-	C$51duino.h$21$1_0$62 ==.
-;	inc/51duino.h:21: millisInit();
-	lcall	_millisInit
-	C$51duino.h$23$1_0$62 ==.
-;	inc/51duino.h:23: P0 = P1 = P2 = P3 = LOW;
-	mov	_P3,#0x00
-	mov	_P2,#0x00
-	mov	_P1,#0x00
-	mov	_P0,#0x00
-	C$51duino.h$25$1_0$62 ==.
-;	inc/51duino.h:25: P30 = P31 = HIGH;
-;	assignBit
-	setb	_P31
-;	assignBit
-	mov	c,_P31
-	mov	_P30,c
-	C$51duino.h$27$1_0$62 ==.
-;	inc/51duino.h:27: setup();
-	lcall	_setup
-	C$51duino.h$29$1_0$62 ==.
-;	inc/51duino.h:29: while (1) {
-00102$:
-	C$51duino.h$30$2_0$63 ==.
-;	inc/51duino.h:30: loop();
-	lcall	_loop
-	sjmp	00102$
-	C$51duino.h$32$1_0$62 ==.
-;	inc/51duino.h:32: }
-	C$51duino.h$32$1_0$62 ==.
-	XG$main$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'setup'
-;------------------------------------------------------------
-	G$setup$0$0 ==.
-	C$main.c$8$1_0$64 ==.
-;	./src/main.c:8: void setup() {
-;	-----------------------------------------
-;	 function setup
-;	-----------------------------------------
-_setup:
-	C$main.c$9$1_0$64 ==.
-;	./src/main.c:9: Serial.begin(9600);
-	mov	r6,(_Serial + 0)
-	mov	r7,(_Serial + 1)
-	push	ar7
-	push	ar6
-	lcall	00103$
-	sjmp	00104$
-00103$:
-	push	ar6
-	push	ar7
-	mov	dptr,#0x2580
-	ret
-00104$:
-	pop	ar6
-	pop	ar7
-	C$main.c$10$1_0$64 ==.
-;	./src/main.c:10: }
-	C$main.c$10$1_0$64 ==.
-	XG$setup$0$0 ==.
-	ret
-;------------------------------------------------------------
-;Allocation info for local variables in function 'loop'
-;------------------------------------------------------------
-;i                         Allocated to registers r7 
-;------------------------------------------------------------
-	G$loop$0$0 ==.
-	C$main.c$12$1_0$65 ==.
-;	./src/main.c:12: void loop() {
-;	-----------------------------------------
-;	 function loop
-;	-----------------------------------------
-_loop:
-	C$main.c$13$1_0$65 ==.
-;	./src/main.c:13: Serial.println("Hello World!");
-	mov	r6,((_Serial + 0x000a) + 0)
-	mov	r7,((_Serial + 0x000a) + 1)
-	push	ar7
-	push	ar6
-	lcall	00116$
-	sjmp	00117$
-00116$:
-	push	ar6
-	push	ar7
-	mov	dptr,#___str_1
-	mov	b,#0x80
-	ret
-00117$:
-	pop	ar6
-	pop	ar7
-	C$main.c$20$3_1$68 ==.
-;	./src/main.c:20: for (uint8_t i = 0; i < sizeof(lights) / sizeof(lights[0]); i++) {
+	lcall	_SerialPrintln
+	C$main.c$18$2_0$22 ==.
+;	./src/main.c:18: getTime(&time);
+	mov	dptr,#_main_time_65536_21
+	mov	b,#0x40
+	lcall	_getTime
+	C$main.c$20$2_0$22 ==.
+;	./src/main.c:20: LcdChar(0, 0, '2');
+	mov	_LcdChar_PARM_2,#0x00
+	mov	_LcdChar_PARM_3,#0x32
+	mov	dpl,#0x00
+	lcall	_LcdChar
+	C$main.c$21$2_0$22 ==.
+;	./src/main.c:21: LcdChar(1, 0, '0');
+	mov	_LcdChar_PARM_2,#0x00
+	mov	_LcdChar_PARM_3,#0x30
+	mov	dpl,#0x01
+	lcall	_LcdChar
+	C$main.c$22$2_0$22 ==.
+;	./src/main.c:22: LcdChar(2, 0, time.year / 10 + '0');
+	mov	r6,_main_time_65536_21
 	mov	r7,#0x00
-00103$:
-	cjne	r7,#0x1e,00118$
-00118$:
-	jnc	00105$
-	C$main.c$21$3_1$68 ==.
-;	./src/main.c:21: delay(50);
-	mov	dptr,#0x0032
-	push	ar7
-	lcall	_delay
-	C$main.c$22$3_1$68 ==.
-;	./src/main.c:22: digitalWrite(latch, LOW);
-	mov	_digitalWrite_PARM_2,#0x00
-	mov	dptr,#_PIN_P16
-	mov	b,#0x80
-	lcall	_digitalWrite
-	pop	ar7
-	C$main.c$23$3_1$68 ==.
-;	./src/main.c:23: shiftOut(dat, clock, MSBFIRST, lights[i]);
-	mov	_shiftOut_PARM_2,#_PIN_P17
-	mov	(_shiftOut_PARM_2 + 1),#(_PIN_P17 >> 8)
-	mov	(_shiftOut_PARM_2 + 2),#0x80
-	mov	a,r7
-	mov	dptr,#_loop_lights_65537_66
-	movc	a,@a+dptr
-	mov	_shiftOut_PARM_4,a
-	mov	_shiftOut_PARM_3,#0x01
-	mov	dptr,#_PIN_P15
-	mov	b,#0x80
-	push	ar7
-	lcall	_shiftOut
-	C$main.c$24$3_1$68 ==.
-;	./src/main.c:24: digitalWrite(latch, HIGH);
-	mov	_digitalWrite_PARM_2,#0x01
-	mov	dptr,#_PIN_P16
-	mov	b,#0x80
-	lcall	_digitalWrite
-	pop	ar7
-	C$main.c$20$2_1$67 ==.
-;	./src/main.c:20: for (uint8_t i = 0; i < sizeof(lights) / sizeof(lights[0]); i++) {
-	inc	r7
-	sjmp	00103$
-00105$:
-	C$main.c$26$2_1$65 ==.
-;	./src/main.c:26: }
-	C$main.c$26$2_1$65 ==.
-	XG$loop$0$0 ==.
+	mov	__divsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
+	mov	(__divsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__divsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x00
+	mov	dpl,#0x02
+	lcall	_LcdChar
+	C$main.c$23$2_0$22 ==.
+;	./src/main.c:23: LcdChar(3, 0, time.year % 10 + '0');
+	mov	r6,_main_time_65536_21
+	mov	r7,#0x00
+	mov	__modsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
+	mov	(__modsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__modsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x00
+	mov	dpl,#0x03
+	lcall	_LcdChar
+	C$main.c$24$2_0$22 ==.
+;	./src/main.c:24: LcdChar(4, 0, '-');
+	mov	_LcdChar_PARM_2,#0x00
+	mov	_LcdChar_PARM_3,#0x2d
+	mov	dpl,#0x04
+	lcall	_LcdChar
+	C$main.c$25$2_0$22 ==.
+;	./src/main.c:25: LcdChar(5, 0, time.month / 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0001)
+	mov	r7,#0x00
+	mov	__divsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
+	mov	(__divsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__divsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x00
+	mov	dpl,#0x05
+	lcall	_LcdChar
+	C$main.c$26$2_0$22 ==.
+;	./src/main.c:26: LcdChar(6, 0, time.month % 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0001)
+	mov	r7,#0x00
+	mov	__modsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
+	mov	(__modsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__modsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x00
+	mov	dpl,#0x06
+	lcall	_LcdChar
+	C$main.c$27$2_0$22 ==.
+;	./src/main.c:27: LcdChar(7, 0, '-');
+	mov	_LcdChar_PARM_2,#0x00
+	mov	_LcdChar_PARM_3,#0x2d
+	mov	dpl,#0x07
+	lcall	_LcdChar
+	C$main.c$28$2_0$22 ==.
+;	./src/main.c:28: LcdChar(8, 0, time.day / 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0002)
+	mov	r7,#0x00
+	mov	__divsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
+	mov	(__divsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__divsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x00
+	mov	dpl,#0x08
+	lcall	_LcdChar
+	C$main.c$29$2_0$22 ==.
+;	./src/main.c:29: LcdChar(9, 0, time.day % 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0002)
+	mov	r7,#0x00
+	mov	__modsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
+	mov	(__modsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__modsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x00
+	mov	dpl,#0x09
+	lcall	_LcdChar
+	C$main.c$31$2_0$22 ==.
+;	./src/main.c:31: LcdChar(0, 1, time.hour / 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0004)
+	mov	r7,#0x00
+	mov	__divsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
+	mov	(__divsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__divsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x01
+	mov	dpl,#0x00
+	lcall	_LcdChar
+	C$main.c$32$2_0$22 ==.
+;	./src/main.c:32: LcdChar(1, 1, time.hour % 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0004)
+	mov	r7,#0x00
+	mov	__modsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
+	mov	(__modsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__modsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x01
+	mov	dpl,#0x01
+	lcall	_LcdChar
+	C$main.c$33$2_0$22 ==.
+;	./src/main.c:33: LcdChar(2, 1, ':');
+	mov	_LcdChar_PARM_2,#0x01
+	mov	_LcdChar_PARM_3,#0x3a
+	mov	dpl,#0x02
+	lcall	_LcdChar
+	C$main.c$34$2_0$22 ==.
+;	./src/main.c:34: LcdChar(3, 1, time.minute / 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0005)
+	mov	r7,#0x00
+	mov	__divsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
+	mov	(__divsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__divsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x01
+	mov	dpl,#0x03
+	lcall	_LcdChar
+	C$main.c$35$2_0$22 ==.
+;	./src/main.c:35: LcdChar(4, 1, time.minute % 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0005)
+	mov	r7,#0x00
+	mov	__modsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
+	mov	(__modsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__modsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x01
+	mov	dpl,#0x04
+	lcall	_LcdChar
+	C$main.c$36$2_0$22 ==.
+;	./src/main.c:36: LcdChar(5, 1, ':');
+	mov	_LcdChar_PARM_2,#0x01
+	mov	_LcdChar_PARM_3,#0x3a
+	mov	dpl,#0x05
+	lcall	_LcdChar
+	C$main.c$37$2_0$22 ==.
+;	./src/main.c:37: LcdChar(6, 1, time.second / 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0006)
+	mov	r7,#0x00
+	mov	__divsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
+	mov	(__divsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__divsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x01
+	mov	dpl,#0x06
+	lcall	_LcdChar
+	C$main.c$38$2_0$22 ==.
+;	./src/main.c:38: LcdChar(7, 1, time.second % 10 + '0');
+	mov	r6,(_main_time_65536_21 + 0x0006)
+	mov	r7,#0x00
+	mov	__modsint_PARM_2,#0x0a
+;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
+	mov	(__modsint_PARM_2 + 1),r7
+	mov	dpl,r6
+	mov	dph,r7
+	lcall	__modsint
+	mov	r6,dpl
+	mov	a,#0x30
+	add	a,r6
+	mov	_LcdChar_PARM_3,a
+	mov	_LcdChar_PARM_2,#0x01
+	mov	dpl,#0x07
+	lcall	_LcdChar
+	ljmp	00102$
+	C$main.c$40$1_0$21 ==.
+;	./src/main.c:40: }
+	C$main.c$40$1_0$21 ==.
+	XG$main$0$0 ==.
 	ret
 	.area CSEG    (CODE)
 	.area CONST   (CODE)
-G$PIN_P00$0_0$0 == .
-_PIN_P00:
-	.db #0x00	; 0
-	.db #0x00	; 0
-G$PIN_P01$0_0$0 == .
-_PIN_P01:
-	.db #0x00	; 0
-	.db #0x01	; 1
-G$PIN_P02$0_0$0 == .
-_PIN_P02:
-	.db #0x00	; 0
-	.db #0x02	; 2
-G$PIN_P03$0_0$0 == .
-_PIN_P03:
-	.db #0x00	; 0
-	.db #0x03	; 3
-G$PIN_P04$0_0$0 == .
-_PIN_P04:
-	.db #0x00	; 0
-	.db #0x04	; 4
-G$PIN_P05$0_0$0 == .
-_PIN_P05:
-	.db #0x00	; 0
-	.db #0x05	; 5
-G$PIN_P06$0_0$0 == .
-_PIN_P06:
-	.db #0x00	; 0
-	.db #0x06	; 6
-G$PIN_P07$0_0$0 == .
-_PIN_P07:
-	.db #0x00	; 0
-	.db #0x07	; 7
-G$PIN_P10$0_0$0 == .
-_PIN_P10:
-	.db #0x01	; 1
-	.db #0x00	; 0
-G$PIN_P11$0_0$0 == .
-_PIN_P11:
-	.db #0x01	; 1
-	.db #0x01	; 1
-G$PIN_P12$0_0$0 == .
-_PIN_P12:
-	.db #0x01	; 1
-	.db #0x02	; 2
-G$PIN_P13$0_0$0 == .
-_PIN_P13:
-	.db #0x01	; 1
-	.db #0x03	; 3
-G$PIN_P14$0_0$0 == .
-_PIN_P14:
-	.db #0x01	; 1
-	.db #0x04	; 4
-G$PIN_P15$0_0$0 == .
-_PIN_P15:
-	.db #0x01	; 1
-	.db #0x05	; 5
-G$PIN_P16$0_0$0 == .
-_PIN_P16:
-	.db #0x01	; 1
-	.db #0x06	; 6
-G$PIN_P17$0_0$0 == .
-_PIN_P17:
-	.db #0x01	; 1
-	.db #0x07	; 7
-G$PIN_P20$0_0$0 == .
-_PIN_P20:
-	.db #0x02	; 2
-	.db #0x00	; 0
-G$PIN_P21$0_0$0 == .
-_PIN_P21:
-	.db #0x02	; 2
-	.db #0x01	; 1
-G$PIN_P22$0_0$0 == .
-_PIN_P22:
-	.db #0x02	; 2
-	.db #0x02	; 2
-G$PIN_P23$0_0$0 == .
-_PIN_P23:
-	.db #0x02	; 2
-	.db #0x03	; 3
-G$PIN_P24$0_0$0 == .
-_PIN_P24:
-	.db #0x02	; 2
-	.db #0x04	; 4
-G$PIN_P25$0_0$0 == .
-_PIN_P25:
-	.db #0x02	; 2
-	.db #0x05	; 5
-G$PIN_P26$0_0$0 == .
-_PIN_P26:
-	.db #0x02	; 2
-	.db #0x06	; 6
-G$PIN_P27$0_0$0 == .
-_PIN_P27:
-	.db #0x02	; 2
-	.db #0x07	; 7
-G$PIN_P30$0_0$0 == .
-_PIN_P30:
-	.db #0x03	; 3
-	.db #0x00	; 0
-G$PIN_P31$0_0$0 == .
-_PIN_P31:
-	.db #0x03	; 3
-	.db #0x01	; 1
-G$PIN_P32$0_0$0 == .
-_PIN_P32:
-	.db #0x03	; 3
-	.db #0x02	; 2
-G$PIN_P33$0_0$0 == .
-_PIN_P33:
-	.db #0x03	; 3
-	.db #0x03	; 3
-G$PIN_P34$0_0$0 == .
-_PIN_P34:
-	.db #0x03	; 3
-	.db #0x04	; 4
-G$PIN_P35$0_0$0 == .
-_PIN_P35:
-	.db #0x03	; 3
-	.db #0x05	; 5
-G$PIN_P36$0_0$0 == .
-_PIN_P36:
-	.db #0x03	; 3
-	.db #0x06	; 6
-G$PIN_P37$0_0$0 == .
-_PIN_P37:
-	.db #0x03	; 3
-	.db #0x07	; 7
 Fmain$__str_0$0_0$0 == .
 	.area CONST   (CODE)
 ___str_0:
-	.db 0x0d
-	.db 0x0a
-	.db 0x00
-	.area CSEG    (CODE)
-Lmain.loop$lights$1_1$66 == .
-_loop_lights_65537_66:
-	.db #0x00	; 0
-	.db #0x01	; 1
-	.db #0x03	; 3
-	.db #0x07	; 7
-	.db #0x0f	; 15
-	.db #0x1f	; 31
-	.db #0x3f	; 63
-	.db #0x7f	; 127
-	.db #0xff	; 255
-	.db #0x7f	; 127
-	.db #0x3f	; 63
-	.db #0x1f	; 31
-	.db #0x0f	; 15
-	.db #0x07	; 7
-	.db #0x03	; 3
-	.db #0x01	; 1
-	.db #0x80	; 128
-	.db #0xc0	; 192
-	.db #0xe0	; 224
-	.db #0xf0	; 240
-	.db #0xf8	; 248
-	.db #0xfc	; 252
-	.db #0xfe	; 254
-	.db #0xff	; 255
-	.db #0xfe	; 254
-	.db #0xfc	; 252
-	.db #0xf8	; 248
-	.db #0xf0	; 240
-	.db #0xe0	; 224
-	.db #0xc0	; 192
-Fmain$__str_1$0_0$0 == .
-	.area CONST   (CODE)
-___str_1:
-	.ascii "Hello World!"
+	.ascii "Test123..."
 	.db 0x00
 	.area CSEG    (CODE)
 	.area XINIT   (CODE)

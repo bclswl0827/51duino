@@ -1,5 +1,5 @@
 {
-  "name": "example",
+  "name": "Nixie_Clock",
   "type": "C51",
   "dependenceList": [],
   "srcDirs": [
@@ -27,7 +27,7 @@
       "uploader": "Custom",
       "uploadConfig": {
         "bin": "",
-        "commandLine": "python ./tools/stcflash.py -p ${port} \"${hexFile}\"",
+        "commandLine": "python3 /home/yuki/Devel/stcgal/stcgal.py -p ${port} \"${hexFile}\" -b 115200",
         "eraseChipCommand": ""
       },
       "uploadConfigMap": {},

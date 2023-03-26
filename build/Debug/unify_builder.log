@@ -1,6 +1,1179 @@
-[2022-10-09 00:53:09]	[done]
+[2023-02-20 01:59:16]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:01:09]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:02:42]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:03:03]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:49: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:54: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:58: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:62: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:03:32]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct __00000000 fixed'
+  to type 'struct __00000000 generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct __00000000 fixed'
+  to type 'struct __00000000 generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct __00000000 fixed'
+  to type 'struct __00000000 generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct __00000000 fixed'
+  to type 'struct __00000000 generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct __00000000 fixed'
+  to type 'struct __00000000 generic* fixed'
+
+[2023-02-20 02:03:42]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:04:01]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: syntax error: token -> 'timeData' ; column 20
+./src/main.c:20: warning 85: in function alignTime unreferenced function argument : 'flag'
+./src/main.c:21: syntax error: token -> '1' ; column 16
+
+[2023-02-20 02:04:21]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:05:50]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:27: error 198: storage class other than register specified for parameter 'time'
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:06:05]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:27: error 198: storage class other than register specified for parameter 't'
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:06:21]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:27: error 198: storage class other than register specified for parameter 'time'
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:06:26]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:20: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:07:47]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:48: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:53: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:57: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+./src/main.c:61: error 78: incompatible types
+from type 'struct TimeData fixed'
+  to type 'struct TimeData generic* fixed'
+
+[2023-02-20 02:08:01]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 30 consecutive bytes in internal RAM for area DSEG.
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:08:23]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 30 consecutive bytes in internal RAM for area DSEG.
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:08:35]	[done]
 	build successfully !
 
-[2022-10-09 00:56:32]	[done]
+[2023-02-20 02:11:23]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+?ASlink-Error-Could not get 30 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:11:29]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 30 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:11:42]	[done]
+	build successfully !
+
+[2023-02-20 02:12:02]	[done]
+	build successfully !
+
+[2023-02-20 02:12:07]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:12:32]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:24: syntax error: token -> '}' ; column 1
+./src/main.c:27: warning 85: in function alignTime unreferenced function argument : 'flag'
+./src/main.c:28: error 1: Syntax error, declaration ignored at 'Serial'
+./src/main.c:29: error 1: Syntax error, declaration ignored at 'Serial'
+
+[2023-02-20 02:12:41]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:23: syntax error: token -> '}' ; column 1
+./src/main.c:26: warning 85: in function alignTime unreferenced function argument : 'flag'
+./src/main.c:27: error 1: Syntax error, declaration ignored at 'Serial'
+./src/main.c:28: error 1: Syntax error, declaration ignored at 'Serial'
+
+[2023-02-20 02:12:45]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:22: warning 88: cast of LITERAL value to 'generic' pointer
+from type 'const-int literal'
+  to type 'unsigned-char generic* fixed'
+./src/main.c:22: error 102: too few parameters
+
+[2023-02-20 02:13:54]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/blueth.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/blueth.c:33: warning 85: in function getMessage unreferenced function argument : 'timeout'
+./src/module/blueth.c:33: warning 85: in function getMessage unreferenced function argument : 'retry'
+./src/module/blueth.c:33: warning 85: in function getMessage unreferenced function argument : 'minute'
+./src/module/blueth.c:33: warning 85: in function getMessage unreferenced function argument : 'second'
+./src/module/blueth.c:35: syntax error: token -> 'return' ; column 6
+
+[2023-02-20 02:14:07]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+?ASlink-Error-Could not get 4 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 02:14:34]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:14:46]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:14:56]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:14:59]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:15:24]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:15:35]	[done]
+	build successfully !
+
+[2023-02-20 02:15:42]	[done]
+	build successfully !
+
+[2023-02-20 02:15:47]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:15:52]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:16:01]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:16:16]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:16:19]	[done]
+	build successfully !
+
+[2023-02-20 02:16:45]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:17:02]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:17:26]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 02:18:34]	[done]
+	build successfully !
+
+[2023-02-20 02:19:20]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 4 consecutive bytes in internal RAM for area OSEG.
+?ASlink-Error-Could not get 2 consecutive bytes in internal RAM for area OSEG.
+?ASlink-Error-Could not get 2 consecutive bytes in internal RAM for area OSEG.
+?ASlink-Error-Could not get 2 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 02:20:22]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 4 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 02:20:42]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:21: error 101: too many parameters
+
+[2023-02-20 02:20:53]	[done]
+	build successfully !
+
+[2023-02-20 02:21:47]	[done]
+	build successfully !
+
+[2023-02-20 13:18:59]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/blueth.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/blueth.c:5: error 20: Undefined identifier 'retry'
+./src/module/blueth.c:7: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:7: warning 127: non-pointer type cast to generic pointer
+from type 'int fixed'
+  to type 'unsigned-char generic* fixed'
+./src/module/blueth.c:9: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:9: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:10: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:10: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:13: error 101: too many parameters 
+./src/module/blueth.c:16: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:16: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:16: error 106: invalid operand for 'multiplication' operation
+./src/module/blueth.c:16: error 20: Undefined identifier 'minute'
+./src/module/blueth.c:16: error 41: invalid operand '-'
+./src/module/blueth.c:17: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:17: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:17: error 106: invalid operand for 'multiplication' operation
+./src/module/blueth.c:17: error 20: Undefined identifier 'second'
+./src/module/blueth.c:17: error 41: invalid operand '-'
+./src/module/blueth.c:19: error 101: too many parameters 
+./src/module/blueth.c:22: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:22: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:23: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:23: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:24: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:24: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:26: error 101: too many parameters
+
+[2023-02-20 13:19:36]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/blueth.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/blueth.c:7: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:7: warning 127: non-pointer type cast to generic pointer
+from type 'int fixed'
+  to type 'unsigned-char generic* fixed'
+./src/module/blueth.c:9: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:9: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:10: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:10: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:16: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:16: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:17: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:17: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:18: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:18: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:20: error 101: too many parameters
+
+[2023-02-20 13:19:40]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/blueth.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/blueth.c:7: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:7: warning 127: non-pointer type cast to generic pointer
+from type 'int fixed'
+  to type 'unsigned-char generic* fixed'
+./src/module/blueth.c:9: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:9: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:10: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:10: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:16: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:16: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:17: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:17: error 22: Array or pointer required for '[]' operation 
+./src/module/blueth.c:18: error 20: Undefined identifier 'buffer'
+./src/module/blueth.c:18: error 22: Array or pointer required for '[]' operation
+
+[2023-02-20 13:19:56]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+?ASlink-Error-Could not get 4 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 13:20:10]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 20 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 13:20:48]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 20 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 13:21:27]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 20 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 13:22:08]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 20 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 13:22:14]	[done]
+	build successfully !
+
+[2023-02-20 13:22:17]	[done]
+	build successfully !
+
+[2023-02-20 13:22:23]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 13:22:30]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 13:22:32]	[done]
+	build successfully !
+
+[2023-02-20 13:22:36]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 13:22:40]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 13:22:43]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 19 consecutive bytes in internal RAM for area DSEG.
+
+
+[2023-02-20 13:22:46]	[done]
+	build successfully !
+
+[2023-02-20 13:23:09]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:19: error 26: '_println' not a structure/union member
+./src/main.c:19: error 12: called object is not a function
+./src/main.c:20: error 26: '_println' not a structure/union member
+./src/main.c:20: error 12: called object is not a function
+./src/main.c:27: error 26: '_println' not a structure/union member
+./src/main.c:27: error 12: called object is not a function
+./src/main.c:32: error 26: '_println' not a structure/union member
+./src/main.c:32: error 12: called object is not a function
+./src/main.c:37: error 26: '_println' not a structure/union member
+./src/main.c:37: error 12: called object is not a function
+./src/main.c:41: error 26: '_println' not a structure/union member
+./src/main.c:41: error 12: called object is not a function
+./src/main.c:46: error 26: '_println' not a structure/union member
+./src/main.c:46: error 12: called object is not a function
+
+[2023-02-20 13:23:47]	[done]
+	build successfully !
+
+[2023-02-20 13:24:10]	[done]
+	build successfully !
+
+[2023-02-20 13:24:16]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+?ASlink-Error-Could not get 20 consecutive bytes in internal RAM for area OSEG.
+
+
+[2023-02-20 13:24:44]	[done]
+	build successfully !
+
+[2023-02-20 13:26:01]	[done]
+	build successfully !
+
+[2023-02-20 13:26:09]	[done]
+	build successfully !
+
+[2023-02-20 13:42:11]	[done]
+	build successfully !
+
+[2023-02-21 17:33:16]	[done]
+	build successfully !
+
+[2023-02-22 01:15:59]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:35: error 20: Undefined identifier 'SWITCH_INTERVAL'
+./src/main.c:39: error 20: Undefined identifier 'SWITCH_INTERVAL'
+./src/main.c:43: error 20: Undefined identifier 'SWITCH_INTERVAL'
+./src/main.c:47: error 20: Undefined identifier 'SWITCH_INTERVAL'
+
+[2023-02-22 01:17:50]	[done]
+	build successfully !
+
+[2023-02-22 01:20:11]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/nixie.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/nixie.c:44: error 20: Undefined identifier 'scan_speed'
+./src/module/nixie.c:49: error 20: Undefined identifier 'scan_speed'
+./src/module/nixie.c:54: error 20: Undefined identifier 'scan_speed'
+./src/module/nixie.c:59: error 20: Undefined identifier 'scan_speed'
+
+[2023-02-22 01:20:41]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:34: error 102: too few parameters
+./src/main.c:38: error 102: too few parameters
+./src/main.c:41: error 102: too few parameters
+
+[2023-02-22 01:21:22]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:34: error 102: too few parameters
+./src/main.c:38: error 102: too few parameters
+./src/main.c:41: error 102: too few parameters
+./src/main.c:45: error 102: too few parameters
+
+[2023-02-22 01:22:13]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:48: error 102: too few parameters
+
+[2023-02-22 01:22:22]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/nixie.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/nixie.c:39: error 20: Undefined identifier 't'
+./src/module/nixie.c:40: error 20: Undefined identifier 't'
+-:0: warning 85: in function setShift unreferenced function argument : 'scan_time'
+-:0: warning 85: in function setProtect unreferenced function argument : 'scan_speed'
+
+[2023-02-22 01:22:34]	[done]
+	build successfully !
+
+[2023-02-22 01:22:49]	[done]
+	build successfully !
+
+[2023-02-22 01:28:56]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:52: error 26: '_println' not a structure/union member
+./src/main.c:52: error 12: called object is not a function
+./src/main.c:54: error 26: '_println' not a structure/union member
+./src/main.c:54: error 12: called object is not a function
+./src/main.c:56: error 26: '_println' not a structure/union member
+./src/main.c:56: error 12: called object is not a function
+
+[2023-02-22 01:30:09]	[done]
+	build successfully !
+
+[2023-02-22 01:31:12]	[done]
+	build successfully !
+
+[2023-02-22 01:35:45]	[done]
+	build successfully !
+
+[2023-02-22 01:36:18]	[done]
+	build successfully !
+
+[2023-02-22 01:43:57]	compilation failed at : "/home/yuki/Devel/boards/Nixie-8051/src/module/nixie.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/nixie.c:5: error 33: Attempt to assign value to a constant variable (=)
+./src/module/nixie.c:7: error 33: Attempt to assign value to a constant variable (=)
+./src/module/nixie.c:8: error 33: Attempt to assign value to a constant variable (=)
+./src/module/nixie.c:9: error 33: Attempt to assign value to a constant variable (=)
+./src/module/nixie.c:11: error 33: Attempt to assign value to a constant variable (=)
+
+[2023-02-22 01:44:54]	[done]
+	build successfully !
+
+[2023-02-22 01:46:38]	[done]
+	build successfully !
+
+[2023-02-22 01:48:59]	[done]
+	build successfully !
+
+[2023-02-22 01:49:27]	[done]
+	build successfully !
+
+[2023-02-22 01:50:46]	[done]
+	build successfully !
+
+[2023-02-22 01:51:38]	[done]
+	build successfully !
+
+[2023-02-22 01:53:24]	[done]
+	build successfully !
+
+[2023-02-22 01:53:48]	[done]
+	build successfully !
+
+[2023-02-22 01:54:50]	[done]
+	build successfully !
+
+[2023-02-22 01:54:57]	[done]
+	build successfully !
+
+[2023-02-22 01:56:07]	[done]
+	build successfully !
+
+[2023-02-22 02:09:53]	[done]
+	build successfully !
+
+[2023-02-22 02:10:51]	[done]
+	build successfully !
+
+[2023-02-22 02:11:37]	[done]
+	build successfully !
+
+[2023-02-22 02:12:07]	[done]
+	build successfully !
+
+[2023-02-22 02:12:31]	[done]
+	build successfully !
+
+[2023-02-22 02:12:48]	[done]
+	build successfully !
+
+[2023-02-22 02:13:22]	[done]
+	build successfully !
+
+[2023-03-26 17:38:28]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:6: error 20: Undefined identifier 'Serial'
+./src/main.c:6: error 25: Structure/Union expected left of '.->'
+./src/main.c:7: error 20: Undefined identifier 'Serial'
+./src/main.c:7: error 25: Structure/Union expected left of '.->'
+
+[2023-03-26 17:38:52]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:7: error 20: Undefined identifier 'BLUETH_BAUD'
+
+[2023-03-26 17:39:01]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:39:29]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:40:04]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:40:20]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdClear' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:40:51]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/module/nixie.c", exit code: 1
+   at unify_builder.Program.compileByMulThread(Int32 thrNum, CmdInfo[] cmds_, List`1 errLogs)
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/blueth.c:1:20: fatal error: blueth.h: No such file or directory
+compilation terminated.
+./src/module/blueth.c:1: warning 190: ISO C forbids an empty source file
+./src/module/nixie.c:1:19: fatal error: nixie.h: No such file or directory
+compilation terminated.
+./src/module/nixie.c:1: warning 190: ISO C forbids an empty source file
+
+[2023-03-26 17:41:01]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/module/utils.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/utils.c:1:19: fatal error: utils.h: No such file or directory
+compilation terminated.
+./src/module/utils.c:1: warning 190: ISO C forbids an empty source file
+
+[2023-03-26 17:41:15]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdClear' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:41:49]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdClear' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:42:10]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdClear' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:42:20]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdClear' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:42:40]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+
+?ASlink-Warning-Undefined Global '_LcdInit' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_2' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar_PARM_3' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdClear' referenced by module 'main'
+
+?ASlink-Warning-Undefined Global '_LcdChar' referenced by module 'main'
+
+
+[2023-03-26 17:44:21]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./build/Debug/src/main.asm:456: Error: <m> multiple definitions error
+./build/Debug/src/main.asm:456: Error: <p> phase error: label location changing between passes 2 and 3
+./build/Debug/src/main.asm:485: Error: <m> multiple definitions error
+./build/Debug/src/main.asm:485: Error: <p> phase error: label location changing between passes 2 and 3
+./build/Debug/src/main.asm:518: Error: <m> multiple definitions error
+./build/Debug/src/main.asm:518: Error: <p> phase error: label location changing between passes 2 and 3
+./build/Debug/src/main.asm:539: Error: <m> multiple definitions error
+./build/Debug/src/main.asm:539: Error: <p> phase error: label location changing between passes 2 and 3
+removing ./build/Debug/src/main.rel
+
+[2023-03-26 17:45:26]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+Multiple definition of C$wire.h$28$1_0$21
+
+
+[2023-03-26 17:45:35]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+Multiple definition of C$wire.h$28$1_0$21
+
+
+[2023-03-26 17:45:48]	link failed !, exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+Multiple definition of C$wire.h$28$1_0$21
+
+
+[2023-03-26 17:46:18]	[done]
+	build successfully !
+
+[2023-03-26 17:46:42]	[done]
+	build successfully !
+
+[2023-03-26 17:48:01]	[done]
+	build successfully !
+
+[2023-03-26 17:48:27]	[done]
+	build successfully !
+
+[2023-03-26 17:49:11]	[done]
+	build successfully !
+
+[2023-03-26 17:49:56]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/main.c:12: syntax error: token -> '}' ; column 5
+
+[2023-03-26 17:50:00]	[done]
+	build successfully !
+
+[2023-03-26 17:50:40]	[done]
+	build successfully !
+
+[2023-03-26 17:52:35]	[done]
+	build successfully !
+
+[2023-03-26 17:53:06]	[done]
+	build successfully !
+
+[2023-03-26 18:45:41]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:15: syntax error: token -> '*' ; column 22
+
+[2023-03-26 18:46:55]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:15: syntax error: token -> '*' ; column 22
+
+[2023-03-26 18:47:09]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:15: syntax error: token -> '*' ; column 22
+
+[2023-03-26 18:47:30]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/main.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+inc/modules/rtc.h:26: error 198: storage class other than register specified for parameter 'time'
+
+[2023-03-26 18:48:02]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/module/rtc.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/rtc.c:28: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:28: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:30: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:30: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:32: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:32: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:32: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:33: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:33: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:33: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:34: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:34: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:34: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:35: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:35: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:35: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:36: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:36: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:36: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:37: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:37: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:37: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:38: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:38: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:38: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:40: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:40: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:52: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:52: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:54: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:54: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:56: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:56: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:57: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:57: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:58: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:58: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:59: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:59: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:60: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:60: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:61: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:61: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:62: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:62: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:64: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:64: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'year'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'month'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'day'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'hour'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'minute'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'second'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'week'
+
+[2023-03-26 18:48:11]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/module/rtc.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/rtc.c:28: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:28: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:30: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:30: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:32: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:32: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:32: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:33: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:33: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:33: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:34: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:34: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:34: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:35: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:35: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:35: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:36: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:36: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:36: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:37: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:37: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:37: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:38: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:38: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:38: error 78: incompatible types
+from type 'void'
+  to type 'unsigned-char fixed'
+./src/module/rtc.c:40: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:40: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:52: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:52: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:54: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:54: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:56: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:56: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:57: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:57: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:58: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:58: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:59: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:59: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:60: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:60: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:61: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:61: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:62: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:62: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:64: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:64: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'year'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'month'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'day'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'hour'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'minute'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'second'
+./src/module/rtc.c:64: warning 85: in function setTime unreferenced function argument : 'week'
+
+[2023-03-26 18:48:49]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/module/rtc.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/rtc.c:40: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:40: error 25: Structure/Union expected left of '.->'
+./src/module/rtc.c:52: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:52: error 25: Structure/Union expected left of '.->'
+
+[2023-03-26 18:48:55]	compilation failed at : "/home/yuki/Devel/boards/LCD1602/src/module/rtc.c", exit code: 1
+   at unify_builder.Program.Main(String[] args_)
+---
+./src/module/rtc.c:52: error 20: Undefined identifier 'Wire'
+./src/module/rtc.c:52: error 25: Structure/Union expected left of '.->'
+
+[2023-03-26 18:49:05]	[done]
+	build successfully !
+
+[2023-03-26 18:50:01]	[done]
+	build successfully !
+
+[2023-03-26 18:50:14]	[done]
+	build successfully !
+
+[2023-03-26 18:51:56]	[done]
+	build successfully !
+
+[2023-03-26 18:52:11]	[done]
+	build successfully !
+
+[2023-03-26 18:52:40]	[done]
+	build successfully !
+
+[2023-03-26 18:55:09]	[done]
+	build successfully !
+
+[2023-03-26 18:55:45]	[done]
+	build successfully !
+
+[2023-03-26 18:58:52]	[done]
+	build successfully !
+
+[2023-03-26 18:59:15]	[done]
+	build successfully !
+
+[2023-03-26 18:59:34]	[done]
+	build successfully !
+
+[2023-03-26 18:59:48]	[done]
+	build successfully !
+
+[2023-03-26 19:00:01]	[done]
+	build successfully !
+
+[2023-03-26 22:36:55]	[done]
+	build successfully !
+
+[2023-03-26 22:37:00]	[done]
+	build successfully !
+
+[2023-03-26 22:37:18]	[done]
 	build successfully !
 

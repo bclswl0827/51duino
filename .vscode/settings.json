@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "*.js": "javascriptreact",
-        "string.h": "c",
-        "bmp180.h": "c",
-        "ads1115.h": "c"
-    }
-}

@@ -1,5 +1,5 @@
 {
-  "name": "Nixie_Clock",
+  "name": "51Duino",
   "type": "C51",
   "dependenceList": [],
   "srcDirs": [

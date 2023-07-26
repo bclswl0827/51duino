@@ -5,9 +5,13 @@
 #error "This header file must be used for SDCC compiler !"
 #endif
 
-#include <config.h>
 #include <reg52.h>
 #include <stdint.h>
+
+#include "config.h"
+
+#define INPUT 0   // 输入模式
+#define OUTPUT 1  // 输出模式
 
 #define PORTS 3  // 端口组数，值为组数 - 1
 
@@ -31,27 +35,22 @@
 // 规范 port 和 read 函数名称
 #define PORT_X_READ_FUNC_NAME(port) PORT_X_NAME(port)##_read
 // 为每一个 port 定义对应函数
-#define DEFINE_PORT_FUNC(port)                                            \
-    static void PORT_X_WRITE_FUNC_NAME(port)(uint_least8_t pin,           \
-                                             uint_least8_t level) {       \
-        if (level) {                                                      \
-            PORT_X_NAME(port) |= 1 << pin;                                \
-        } else {                                                          \
-            PORT_X_NAME(port) &= ~(1 << pin);                             \
-        }                                                                 \
-    }                                                                     \
-    static uint_least8_t PORT_X_READ_FUNC_NAME(port)(uint_least8_t pin) { \
-        return (PORT_X_NAME(port) >> pin) & 1;                            \
+#define DEFINE_PORT_FUNC(port)                                             \
+    static void PORT_X_WRITE_FUNC_NAME(port)(uint8_t pin, uint8_t level) { \
+        if (level) {                                                       \
+            PORT_X_NAME(port) |= 1 << pin;                                 \
+        } else {                                                           \
+            PORT_X_NAME(port) &= ~(1 << pin);                              \
+        }                                                                  \
+    }                                                                      \
+    static uint8_t PORT_X_READ_FUNC_NAME(port)(uint8_t pin) {              \
+        return (PORT_X_NAME(port) >> pin) & 1;                             \
     }
 
-void digitalWrite(uint_least8_t _pin, uint_least8_t level);
-uint_least8_t digitalRead(uint_least8_t _pin);
-uint_least8_t shiftIn(uint_least8_t dataPin,
-                      uint_least8_t clockPin,
-                      uint_least8_t bitOrder);
-void shiftOut(uint_least8_t dataPin,
-              uint_least8_t clockPin,
-              uint_least8_t bitOrder,
-              uint_least8_t val);
+void digitalWrite(uint8_t _pin, uint8_t level);
+uint8_t digitalRead(uint8_t _pin);
+uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
+void pinMode(uint8_t _pin, uint8_t mode);
 
 #endif

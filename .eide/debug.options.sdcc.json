@@ -9,7 +9,7 @@
         "out-debug-info": true
     },
     "c/cpp-compiler": {
-        "language-c": "sdcc11"
+        "language-c": "sdcc99"
     },
     "asm-compiler": {},
     "linker": {

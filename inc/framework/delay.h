@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-void delay(uint_least16_t t);
-void delayMicroseconds(uint_least16_t t);
+void delay(uint16_t t);
+void delayMicroseconds(uint16_t t);
 
 #endif

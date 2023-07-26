@@ -1,0 +1,94 @@
+#ifndef __MODULE_ADC_ADS1115_H
+#define __MODULE_ADC_ADS1115_H
+
+#ifndef __SDCC
+#error "This header file must be used for SDCC compiler !"
+#endif
+
+#include <stdint.h>
+
+#include "framework/delay.h"
+#include "framework/wire.h"
+
+#define ADS1115_ADDRESS 0x48
+
+enum ADS1115_MUX {
+    ADS1115_MUX_DIFF_0_1 = 0x0000,
+    ADS1115_MUX_DIFF_0_3 = 0x1000,
+    ADS1115_MUX_DIFF_1_3 = 0x2000,
+    ADS1115_MUX_DIFF_2_3 = 0x3000,
+    ADS1115_MUX_SINGLE_0_GND = 0x4000,
+    ADS1115_MUX_SINGLE_1_GND = 0x5000,
+    ADS1115_MUX_SINGLE_2_GND = 0x6000,
+    ADS1115_MUX_SINGLE_3_GND = 0x7000,
+};
+
+enum ADS1115_PGA {
+    ADS1115_PGA_6_144V = 0x0000,
+    ADS1115_PGA_4_096V = 0x0200,
+    ADS1115_PGA_2_048V = 0x0400,
+    ADS1115_PGA_1_024V = 0x0600,
+    ADS1115_PGA_0_512V = 0x0800,
+    ADS1115_PGA_0_256V = 0x0A00,
+};
+
+enum ADS1115_DATARATE {
+    ADS1115_DATARATE_8 = 0x0000,
+    ADS1115_DATARATE_16 = 0x0020,
+    ADS1115_DATARATE_32 = 0x0040,
+    ADS1115_DATARATE_64 = 0x0060,
+    ADS1115_DATARATE_128 = 0x0080,
+    ADS1115_DATARATE_250 = 0x00A0,
+    ADS1115_DATARATE_475 = 0x00C0,
+    ADS1115_DATARATE_860 = 0x00E0,
+};
+
+enum ADS1115_MODE {
+    ADS1115_MODE_CONTINUE = 0x0000,  // 不准确
+    ADS1115_MODE_SINGLE = 0x0100,
+};
+
+enum ADS1115_COMP_MODE {
+    ADS1115_COMP_MODE_TRADITIONAL = 0x0000,
+    ADS1115_COMP_MODE_WINDOW = 0x0010,
+};
+
+enum ADS1115_COMP_POL {
+    ADS1115_COMP_POL_ACTIVE_LOW = 0x0000,
+    ADS1115_COMP_POL_ACTIVE_HIGH = 0x0008,
+};
+
+enum ADS1115_COMP_LATCH {
+    ADS1115_COMP_NON_LATCH = 0x0000,
+    ADS1115_COMP_LATCH = 0x0004,
+};
+
+enum ADS1115_COMP_QUEUE {
+    ADS1115_COMP_QUEUE_1 = 0x0000,
+    ADS1115_COMP_QUEUE_2 = 0x0001,
+    ADS1115_COMP_QUEUE_4 = 0x0002,
+    ADS1115_COMP_QUEUE_DISABLE = 0x0003,
+};
+
+enum ADS1115_REG {
+    ADS1115_REG_CONVERSION = 0x00,
+    ADS1115_REG_CONFIG = 0x01,
+};
+
+enum ADS1115_OS {
+    ADS1115_OS_BUSY = 0x0000,
+    ADS1115_OS_NOT_BUSY = 0x8000,
+    ADS1115_OS_START_SINGLE = 0x8000,
+};
+
+void ADS1115Init(void);
+int16_t ADS1115Read(enum ADS1115_MUX mux,
+                    enum ADS1115_PGA pga,
+                    enum ADS1115_DATARATE datarate,
+                    enum ADS1115_COMP_MODE compMode,
+                    enum ADS1115_COMP_POL compPol,
+                    enum ADS1115_COMP_LATCH compLatch,
+                    enum ADS1115_COMP_QUEUE compQueue);
+float ADS1115ToVoltage(enum ADS1115_PGA pga);
+
+#endif

@@ -9,13 +9,14 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _SerialPrintln
+	.globl _sendSensorData
+	.globl _getChecksum
+	.globl _ADS1115ToVoltage
+	.globl _ADS1115Read
+	.globl _ADS1115Init
+	.globl _SerialWrite
 	.globl _SerialBegin
-	.globl _setTime
-	.globl _getTime
-	.globl _LcdChar
-	.globl _LcdInit
-	.globl _LcdClear
+	.globl ___memcpy
 	.globl _CP_RL2
 	.globl _C_T2
 	.globl _TR2
@@ -371,12 +372,25 @@ _CP_RL2	=	0x00c8
 ; internal ram data
 ;--------------------------------------------------------
 	.area DSEG    (DATA)
-Lmain.main$time$1_0$21==.
-_main_time_65536_21:
-	.ds 7
+Lmain.sendSensorData$dataBytes$1_0$53==.
+_sendSensorData_dataBytes_65536_53:
+	.ds 17
+Lmain.main$dat$1_0$56==.
+_main_dat_65536_56:
+	.ds 17
+Lmain.main$f$1_1$57==.
+_main_f_65537_57:
+	.ds 4
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
 ;--------------------------------------------------------
+	.area	OSEG    (OVR,DATA)
+Lmain.getChecksum$dat$1_0$46==.
+_getChecksum_dat_65536_46:
+	.ds 3
+Lmain.getChecksum$bytes$3_0$49==.
+_getChecksum_bytes_196608_49:
+	.ds 3
 ;--------------------------------------------------------
 ; Stack segment in internal ram 
 ;--------------------------------------------------------
@@ -457,17 +471,21 @@ __sdcc_program_startup:
 ;--------------------------------------------------------
 	.area CSEG    (CODE)
 ;------------------------------------------------------------
-;Allocation info for local variables in function 'main'
+;Allocation info for local variables in function 'getChecksum'
 ;------------------------------------------------------------
-;time                      Allocated with name '_main_time_65536_21'
+;dat                       Allocated with name '_getChecksum_dat_65536_46'
+;checksum                  Allocated to registers r4 
+;i                         Allocated to registers r3 
+;bytes                     Allocated with name '_getChecksum_bytes_196608_49'
+;j                         Allocated to registers r7 
 ;------------------------------------------------------------
-	G$main$0$0 ==.
-	C$main.c$5$0_0$21 ==.
-;	./src/main.c:5: void main() {
+	G$getChecksum$0$0 ==.
+	C$main.c$28$0_0$47 ==.
+;	./src/main.c:28: uint8_t getChecksum(float* dat) {
 ;	-----------------------------------------
-;	 function main
+;	 function getChecksum
 ;	-----------------------------------------
-_main:
+_getChecksum:
 	ar7 = 0x07
 	ar6 = 0x06
 	ar5 = 0x05
@@ -476,292 +494,332 @@ _main:
 	ar2 = 0x02
 	ar1 = 0x01
 	ar0 = 0x00
-	C$main.c$8$1_0$21 ==.
-;	./src/main.c:8: SerialBegin(9600);
-	mov	dptr,#0x2580
-	lcall	_SerialBegin
-	C$main.c$10$1_0$21 ==.
-;	./src/main.c:10: LcdInit();
-	lcall	_LcdInit
-	C$main.c$11$1_0$21 ==.
-;	./src/main.c:11: LcdClear();
-	lcall	_LcdClear
-	C$main.c$13$1_0$21 ==.
-;	./src/main.c:13: setTime(23, 3, 26, 18, 45, 10, 6);
-	mov	_setTime_PARM_2,#0x03
-	mov	_setTime_PARM_3,#0x1a
-	mov	_setTime_PARM_4,#0x12
-	mov	_setTime_PARM_5,#0x2d
-	mov	_setTime_PARM_6,#0x0a
-	mov	_setTime_PARM_7,#0x06
-	mov	dpl,#0x17
-	lcall	_setTime
-	C$main.c$15$1_0$21 ==.
-;	./src/main.c:15: while (1) {
+	mov	_getChecksum_dat_65536_46,dpl
+	mov	(_getChecksum_dat_65536_46 + 1),dph
+	mov	(_getChecksum_dat_65536_46 + 2),b
+	C$main.c$29$2_0$47 ==.
+;	./src/main.c:29: uint8_t checksum = 0;
+	mov	r4,#0x00
+	C$main.c$31$1_0$47 ==.
+;	./src/main.c:31: for (uint8_t i = 0; i < 4; i++) {
+	mov	r3,#0x00
+00107$:
+	cjne	r3,#0x04,00129$
+00129$:
+	jnc	00102$
+	C$main.c$32$3_0$49 ==.
+;	./src/main.c:32: uint8_t* bytes = (uint8_t*)&dat[i];
+	mov	a,r3
+	mov	b,#0x04
+	mul	ab
+	add	a,_getChecksum_dat_65536_46
+	mov	r0,a
+	mov	a,(_getChecksum_dat_65536_46 + 1)
+	addc	a,b
+	mov	r1,a
+	mov	r2,(_getChecksum_dat_65536_46 + 2)
+	mov	_getChecksum_bytes_196608_49,r0
+	mov	(_getChecksum_bytes_196608_49 + 1),#0x00
+	mov	(_getChecksum_bytes_196608_49 + 2),#0x40
+	C$main.c$34$1_0$47 ==.
+;	./src/main.c:34: for (uint8_t j = 0; j < sizeof(float); j++) {
+	mov	r7,#0x00
+00104$:
+	cjne	r7,#0x04,00131$
+00131$:
+	jnc	00108$
+	C$main.c$35$5_0$51 ==.
+;	./src/main.c:35: checksum ^= bytes[j];
+	mov	a,r7
+	add	a,_getChecksum_bytes_196608_49
+	mov	r2,a
+	clr	a
+	addc	a,(_getChecksum_bytes_196608_49 + 1)
+	mov	r5,a
+	mov	r6,(_getChecksum_bytes_196608_49 + 2)
+	mov	dpl,r2
+	mov	dph,r5
+	mov	b,r6
+	lcall	__gptrget
+	mov	r2,a
+	xrl	ar4,a
+	C$main.c$34$4_0$50 ==.
+;	./src/main.c:34: for (uint8_t j = 0; j < sizeof(float); j++) {
+	inc	r7
+	sjmp	00104$
+00108$:
+	C$main.c$31$2_0$48 ==.
+;	./src/main.c:31: for (uint8_t i = 0; i < 4; i++) {
+	inc	r3
+	sjmp	00107$
 00102$:
-	C$main.c$16$2_0$22 ==.
-;	./src/main.c:16: SerialPrintln("Test123...");
-	mov	dptr,#___str_0
-	mov	b,#0x80
-	lcall	_SerialPrintln
-	C$main.c$18$2_0$22 ==.
-;	./src/main.c:18: getTime(&time);
-	mov	dptr,#_main_time_65536_21
-	mov	b,#0x40
-	lcall	_getTime
-	C$main.c$20$2_0$22 ==.
-;	./src/main.c:20: LcdChar(0, 0, '2');
-	mov	_LcdChar_PARM_2,#0x00
-	mov	_LcdChar_PARM_3,#0x32
-	mov	dpl,#0x00
-	lcall	_LcdChar
-	C$main.c$21$2_0$22 ==.
-;	./src/main.c:21: LcdChar(1, 0, '0');
-	mov	_LcdChar_PARM_2,#0x00
-	mov	_LcdChar_PARM_3,#0x30
-	mov	dpl,#0x01
-	lcall	_LcdChar
-	C$main.c$22$2_0$22 ==.
-;	./src/main.c:22: LcdChar(2, 0, time.year / 10 + '0');
-	mov	r6,_main_time_65536_21
-	mov	r7,#0x00
-	mov	__divsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
-	mov	(__divsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__divsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x00
-	mov	dpl,#0x02
-	lcall	_LcdChar
-	C$main.c$23$2_0$22 ==.
-;	./src/main.c:23: LcdChar(3, 0, time.year % 10 + '0');
-	mov	r6,_main_time_65536_21
-	mov	r7,#0x00
-	mov	__modsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
-	mov	(__modsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__modsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x00
-	mov	dpl,#0x03
-	lcall	_LcdChar
-	C$main.c$24$2_0$22 ==.
-;	./src/main.c:24: LcdChar(4, 0, '-');
-	mov	_LcdChar_PARM_2,#0x00
-	mov	_LcdChar_PARM_3,#0x2d
-	mov	dpl,#0x04
-	lcall	_LcdChar
-	C$main.c$25$2_0$22 ==.
-;	./src/main.c:25: LcdChar(5, 0, time.month / 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0001)
-	mov	r7,#0x00
-	mov	__divsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
-	mov	(__divsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__divsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x00
-	mov	dpl,#0x05
-	lcall	_LcdChar
-	C$main.c$26$2_0$22 ==.
-;	./src/main.c:26: LcdChar(6, 0, time.month % 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0001)
-	mov	r7,#0x00
-	mov	__modsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
-	mov	(__modsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__modsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x00
-	mov	dpl,#0x06
-	lcall	_LcdChar
-	C$main.c$27$2_0$22 ==.
-;	./src/main.c:27: LcdChar(7, 0, '-');
-	mov	_LcdChar_PARM_2,#0x00
-	mov	_LcdChar_PARM_3,#0x2d
-	mov	dpl,#0x07
-	lcall	_LcdChar
-	C$main.c$28$2_0$22 ==.
-;	./src/main.c:28: LcdChar(8, 0, time.day / 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0002)
-	mov	r7,#0x00
-	mov	__divsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
-	mov	(__divsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__divsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x00
-	mov	dpl,#0x08
-	lcall	_LcdChar
-	C$main.c$29$2_0$22 ==.
-;	./src/main.c:29: LcdChar(9, 0, time.day % 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0002)
-	mov	r7,#0x00
-	mov	__modsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
-	mov	(__modsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__modsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x00
-	mov	dpl,#0x09
-	lcall	_LcdChar
-	C$main.c$31$2_0$22 ==.
-;	./src/main.c:31: LcdChar(0, 1, time.hour / 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0004)
-	mov	r7,#0x00
-	mov	__divsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
-	mov	(__divsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__divsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x01
-	mov	dpl,#0x00
-	lcall	_LcdChar
-	C$main.c$32$2_0$22 ==.
-;	./src/main.c:32: LcdChar(1, 1, time.hour % 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0004)
-	mov	r7,#0x00
-	mov	__modsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
-	mov	(__modsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__modsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x01
-	mov	dpl,#0x01
-	lcall	_LcdChar
-	C$main.c$33$2_0$22 ==.
-;	./src/main.c:33: LcdChar(2, 1, ':');
-	mov	_LcdChar_PARM_2,#0x01
-	mov	_LcdChar_PARM_3,#0x3a
-	mov	dpl,#0x02
-	lcall	_LcdChar
-	C$main.c$34$2_0$22 ==.
-;	./src/main.c:34: LcdChar(3, 1, time.minute / 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0005)
-	mov	r7,#0x00
-	mov	__divsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
-	mov	(__divsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__divsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x01
-	mov	dpl,#0x03
-	lcall	_LcdChar
-	C$main.c$35$2_0$22 ==.
-;	./src/main.c:35: LcdChar(4, 1, time.minute % 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0005)
-	mov	r7,#0x00
-	mov	__modsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
-	mov	(__modsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__modsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x01
-	mov	dpl,#0x04
-	lcall	_LcdChar
-	C$main.c$36$2_0$22 ==.
-;	./src/main.c:36: LcdChar(5, 1, ':');
-	mov	_LcdChar_PARM_2,#0x01
-	mov	_LcdChar_PARM_3,#0x3a
-	mov	dpl,#0x05
-	lcall	_LcdChar
-	C$main.c$37$2_0$22 ==.
-;	./src/main.c:37: LcdChar(6, 1, time.second / 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0006)
-	mov	r7,#0x00
-	mov	__divsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__divsint_PARM_2 + 1),#0x00
-	mov	(__divsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__divsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x01
-	mov	dpl,#0x06
-	lcall	_LcdChar
-	C$main.c$38$2_0$22 ==.
-;	./src/main.c:38: LcdChar(7, 1, time.second % 10 + '0');
-	mov	r6,(_main_time_65536_21 + 0x0006)
-	mov	r7,#0x00
-	mov	__modsint_PARM_2,#0x0a
-;	1-genFromRTrack replaced	mov	(__modsint_PARM_2 + 1),#0x00
-	mov	(__modsint_PARM_2 + 1),r7
-	mov	dpl,r6
-	mov	dph,r7
-	lcall	__modsint
-	mov	r6,dpl
-	mov	a,#0x30
-	add	a,r6
-	mov	_LcdChar_PARM_3,a
-	mov	_LcdChar_PARM_2,#0x01
-	mov	dpl,#0x07
-	lcall	_LcdChar
-	ljmp	00102$
-	C$main.c$40$1_0$21 ==.
+	C$main.c$39$1_0$47 ==.
+;	./src/main.c:39: return checksum;
+	mov	dpl,r4
+	C$main.c$40$1_0$47 ==.
 ;	./src/main.c:40: }
-	C$main.c$40$1_0$21 ==.
+	C$main.c$40$1_0$47 ==.
+	XG$getChecksum$0$0 ==.
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'sendSensorData'
+;------------------------------------------------------------
+;dat                       Allocated to registers r5 r6 r7 
+;dataBytes                 Allocated with name '_sendSensorData_dataBytes_65536_53'
+;i                         Allocated to registers r7 
+;------------------------------------------------------------
+	G$sendSensorData$0$0 ==.
+	C$main.c$43$1_0$53 ==.
+;	./src/main.c:43: void sendSensorData(sensor_t* dat) {
+;	-----------------------------------------
+;	 function sendSensorData
+;	-----------------------------------------
+_sendSensorData:
+	mov	r5,dpl
+	mov	r6,dph
+	mov	r7,b
+	C$main.c$45$1_0$53 ==.
+;	./src/main.c:45: memcpy(dataBytes, dat, sizeof(sensor_t));
+	mov	___memcpy_PARM_2,r5
+	mov	(___memcpy_PARM_2 + 1),r6
+	mov	(___memcpy_PARM_2 + 2),r7
+	mov	___memcpy_PARM_3,#0x11
+	mov	(___memcpy_PARM_3 + 1),#0x00
+	mov	dptr,#_sendSensorData_dataBytes_65536_53
+	mov	b,#0x40
+	lcall	___memcpy
+	C$main.c$47$2_0$53 ==.
+;	./src/main.c:47: for (uint8_t i = 0; i < sizeof(sensor_t); i++) {
+	mov	r7,#0x00
+00103$:
+	cjne	r7,#0x11,00116$
+00116$:
+	jnc	00105$
+	C$main.c$48$3_0$55 ==.
+;	./src/main.c:48: SerialWrite(dataBytes[i]);
+	mov	a,r7
+	add	a,#_sendSensorData_dataBytes_65536_53
+	mov	r1,a
+	mov	dpl,@r1
+	push	ar7
+	lcall	_SerialWrite
+	pop	ar7
+	C$main.c$47$2_0$54 ==.
+;	./src/main.c:47: for (uint8_t i = 0; i < sizeof(sensor_t); i++) {
+	inc	r7
+	sjmp	00103$
+00105$:
+	C$main.c$50$2_0$53 ==.
+;	./src/main.c:50: }
+	C$main.c$50$2_0$53 ==.
+	XG$sendSensorData$0$0 ==.
+	ret
+;------------------------------------------------------------
+;Allocation info for local variables in function 'main'
+;------------------------------------------------------------
+;dat                       Allocated with name '_main_dat_65536_56'
+;f                         Allocated with name '_main_f_65537_57'
+;------------------------------------------------------------
+	G$main$0$0 ==.
+	C$main.c$52$2_0$56 ==.
+;	./src/main.c:52: void main() {
+;	-----------------------------------------
+;	 function main
+;	-----------------------------------------
+_main:
+	C$main.c$54$1_0$56 ==.
+;	./src/main.c:54: SerialBegin(19200);
+	mov	dptr,#0x4b00
+	lcall	_SerialBegin
+	C$main.c$56$1_0$56 ==.
+;	./src/main.c:56: ADS1115Init();
+	lcall	_ADS1115Init
+	C$main.c$57$1_1$57 ==.
+;	./src/main.c:57: float f = ADS1115ToVoltage(ADS1115_PGA_4_096V);
+	mov	dptr,#0x0200
+	lcall	_ADS1115ToVoltage
+	mov	_main_f_65537_57,dpl
+	mov	(_main_f_65537_57 + 1),dph
+	mov	(_main_f_65537_57 + 2),b
+	mov	(_main_f_65537_57 + 3),a
+	C$main.c$59$1_1$57 ==.
+;	./src/main.c:59: while (1) {
+00102$:
+	C$main.c$60$2_1$58 ==.
+;	./src/main.c:60: dat.AIN[0] =
+	C$main.c$64$2_1$58 ==.
+;	./src/main.c:64: ADS1115_COMP_QUEUE_DISABLE);
+	mov	_ADS1115Read_PARM_2,#0x00
+	mov	(_ADS1115Read_PARM_2 + 1),#0x02
+	mov	_ADS1115Read_PARM_3,#0xe0
+	mov	_ADS1115Read_PARM_4,#0x10
+	mov	_ADS1115Read_PARM_5,#0x00
+	mov	_ADS1115Read_PARM_6,#0x00
+	mov	_ADS1115Read_PARM_7,#0x03
+	mov	dptr,#0x4000
+	lcall	_ADS1115Read
+	lcall	___sint2fs
+	mov	r2,dpl
+	mov	r3,dph
+	mov	r6,b
+	mov	r7,a
+	push	ar2
+	push	ar3
+	push	ar6
+	push	ar7
+	mov	dpl,_main_f_65537_57
+	mov	dph,(_main_f_65537_57 + 1)
+	mov	b,(_main_f_65537_57 + 2)
+	mov	a,(_main_f_65537_57 + 3)
+	lcall	___fsmul
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	mov	a,sp
+	add	a,#0xfc
+	mov	sp,a
+	mov	(_main_dat_65536_56 + 0),r4
+	mov	(_main_dat_65536_56 + 1),r5
+	mov	(_main_dat_65536_56 + 2),r6
+	mov	(_main_dat_65536_56 + 3),r7
+	C$main.c$65$2_1$58 ==.
+;	./src/main.c:65: dat.AIN[1] =
+	C$main.c$69$2_1$58 ==.
+;	./src/main.c:69: ADS1115_COMP_QUEUE_DISABLE);
+	mov	_ADS1115Read_PARM_2,#0x00
+	mov	(_ADS1115Read_PARM_2 + 1),#0x02
+	mov	_ADS1115Read_PARM_3,#0xe0
+	mov	_ADS1115Read_PARM_4,#0x10
+	mov	_ADS1115Read_PARM_5,#0x00
+	mov	_ADS1115Read_PARM_6,#0x00
+	mov	_ADS1115Read_PARM_7,#0x03
+	mov	dptr,#0x5000
+	lcall	_ADS1115Read
+	lcall	___sint2fs
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	push	ar4
+	push	ar5
+	push	ar6
+	push	ar7
+	mov	dpl,_main_f_65537_57
+	mov	dph,(_main_f_65537_57 + 1)
+	mov	b,(_main_f_65537_57 + 2)
+	mov	a,(_main_f_65537_57 + 3)
+	lcall	___fsmul
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	mov	a,sp
+	add	a,#0xfc
+	mov	sp,a
+	mov	((_main_dat_65536_56 + 0x0004) + 0),r4
+	mov	((_main_dat_65536_56 + 0x0004) + 1),r5
+	mov	((_main_dat_65536_56 + 0x0004) + 2),r6
+	mov	((_main_dat_65536_56 + 0x0004) + 3),r7
+	C$main.c$70$2_1$58 ==.
+;	./src/main.c:70: dat.AIN[2] =
+	C$main.c$74$2_1$58 ==.
+;	./src/main.c:74: ADS1115_COMP_QUEUE_DISABLE);
+	mov	_ADS1115Read_PARM_2,#0x00
+	mov	(_ADS1115Read_PARM_2 + 1),#0x02
+	mov	_ADS1115Read_PARM_3,#0xe0
+	mov	_ADS1115Read_PARM_4,#0x10
+	mov	_ADS1115Read_PARM_5,#0x00
+	mov	_ADS1115Read_PARM_6,#0x00
+	mov	_ADS1115Read_PARM_7,#0x03
+	mov	dptr,#0x6000
+	lcall	_ADS1115Read
+	lcall	___sint2fs
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	push	ar4
+	push	ar5
+	push	ar6
+	push	ar7
+	mov	dpl,_main_f_65537_57
+	mov	dph,(_main_f_65537_57 + 1)
+	mov	b,(_main_f_65537_57 + 2)
+	mov	a,(_main_f_65537_57 + 3)
+	lcall	___fsmul
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	mov	a,sp
+	add	a,#0xfc
+	mov	sp,a
+	mov	((_main_dat_65536_56 + 0x0008) + 0),r4
+	mov	((_main_dat_65536_56 + 0x0008) + 1),r5
+	mov	((_main_dat_65536_56 + 0x0008) + 2),r6
+	mov	((_main_dat_65536_56 + 0x0008) + 3),r7
+	C$main.c$75$2_1$58 ==.
+;	./src/main.c:75: dat.AIN[3] =
+	C$main.c$79$2_1$58 ==.
+;	./src/main.c:79: ADS1115_COMP_QUEUE_DISABLE);
+	mov	_ADS1115Read_PARM_2,#0x00
+	mov	(_ADS1115Read_PARM_2 + 1),#0x02
+	mov	_ADS1115Read_PARM_3,#0xe0
+	mov	_ADS1115Read_PARM_4,#0x10
+	mov	_ADS1115Read_PARM_5,#0x00
+	mov	_ADS1115Read_PARM_6,#0x00
+	mov	_ADS1115Read_PARM_7,#0x03
+	mov	dptr,#0x7000
+	lcall	_ADS1115Read
+	lcall	___sint2fs
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	push	ar4
+	push	ar5
+	push	ar6
+	push	ar7
+	mov	dpl,_main_f_65537_57
+	mov	dph,(_main_f_65537_57 + 1)
+	mov	b,(_main_f_65537_57 + 2)
+	mov	a,(_main_f_65537_57 + 3)
+	lcall	___fsmul
+	mov	r4,dpl
+	mov	r5,dph
+	mov	r6,b
+	mov	r7,a
+	mov	a,sp
+	add	a,#0xfc
+	mov	sp,a
+	mov	((_main_dat_65536_56 + 0x000c) + 0),r4
+	mov	((_main_dat_65536_56 + 0x000c) + 1),r5
+	mov	((_main_dat_65536_56 + 0x000c) + 2),r6
+	mov	((_main_dat_65536_56 + 0x000c) + 3),r7
+	C$main.c$80$2_1$58 ==.
+;	./src/main.c:80: dat.Checksum = getChecksum(dat.AIN);
+	mov	dptr,#_main_dat_65536_56
+	mov	b,#0x40
+	lcall	_getChecksum
+	mov	a,dpl
+	mov	(_main_dat_65536_56 + 0x0010),a
+	C$main.c$82$2_1$58 ==.
+;	./src/main.c:82: SerialWrite(SYNC_WORD);
+	mov	dpl,#0x8a
+	lcall	_SerialWrite
+	C$main.c$83$2_1$58 ==.
+;	./src/main.c:83: sendSensorData(&dat);
+	mov	dptr,#_main_dat_65536_56
+	mov	b,#0x40
+	lcall	_sendSensorData
+	ljmp	00102$
+	C$main.c$85$1_1$56 ==.
+;	./src/main.c:85: }
+	C$main.c$85$1_1$56 ==.
 	XG$main$0$0 ==.
 	ret
 	.area CSEG    (CODE)
 	.area CONST   (CODE)
-Fmain$__str_0$0_0$0 == .
-	.area CONST   (CODE)
-___str_0:
-	.ascii "Test123..."
-	.db 0x00
-	.area CSEG    (CODE)
 	.area XINIT   (CODE)
 	.area CABS    (ABS,CODE)

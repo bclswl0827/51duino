@@ -1,14 +1,8 @@
-#include <wire.h>
+#include "framework/wire.h"
 
-// 全局变量记录地址
-uint_least8_t _address = 0x00;
-// ACK / NACK 标志
-uint_least8_t _ack = 0;
-
-// 用于等待电平稳定和控制通讯速率
-void _WireDelay() {
-    ;
-}
+uint8_t _wire_address = 0x00,  // 全局变量记录地址
+    _wire_status = I2C_START,  // 继续传输标志
+    _wire_remain = 0;          // 剩余字节数
 
 // 初始化 I2C 总线
 void WireBegin() {
@@ -17,7 +11,8 @@ void WireBegin() {
 }
 
 // 启动 I2C 传输
-void WireBeginTransmission(uint_least8_t addr) {
+void WireBeginTransmission(uint8_t addr) {
+    _wire_address = addr;
     // 发出启动信号
     PIN_WIRE_SDA = HIGH;
     PIN_WIRE_SCL = HIGH;
@@ -25,12 +20,10 @@ void WireBeginTransmission(uint_least8_t addr) {
     PIN_WIRE_SCL = LOW;
     // 发送设备地址
     WireWrite(addr << 1);
-    // 赋值到全局变量
-    _address = addr;
 }
 
 // 结束 I2C 传输
-uint_least8_t WireEndTransmission() {
+uint8_t WireEndTransmission() {
     PIN_WIRE_SDA = LOW;
     PIN_WIRE_SCL = HIGH;
     PIN_WIRE_SDA = HIGH;
@@ -38,76 +31,73 @@ uint_least8_t WireEndTransmission() {
 }
 
 // I2C 读取 1 字节
-uint_least8_t WireRead() {
+uint8_t WireRead() {
+    uint8_t dat = 0;
+
+    if (_wire_status == I2C_START) {
+        // 进入接收模式
+        PIN_WIRE_SDA = HIGH;
+        PIN_WIRE_SCL = HIGH;
+        PIN_WIRE_SDA = LOW;
+        PIN_WIRE_SCL = LOW;
+        // 送出读地址
+        WireWrite((_wire_address << 1) | 1);
+    }
+
+    // 剩余字节为 0 时进入重置状态
+    if (!--_wire_remain) {
+        _wire_status = I2C_START;
+    }
+
+    // 循环 8 次将一个字节读出，先读高再传低位
+    PIN_WIRE_SDA = HIGH;
+    for (uint8_t i = 0; i < 8; i++) {
+        dat <<= 1;
+        PIN_WIRE_SCL = HIGH;
+        dat |= PIN_WIRE_SDA;
+        PIN_WIRE_SCL = LOW;
+    }
+
+    // 存在剩余字节则发送 ACK，否则为 NACK
+    PIN_WIRE_SDA = _wire_remain ? LOW : HIGH;
+    PIN_WIRE_SCL = HIGH;
+    PIN_WIRE_SCL = LOW;
+
+    return dat;
+}
+
+// I2C 发送 1 字节
+void WireWrite(uint8_t dat) {
+    // 循环 8 次将一个字节传出，先传高位再传低位
+    PIN_WIRE_SCL = LOW;
+    for (uint8_t i = 0; i < 8; i++) {
+        PIN_WIRE_SDA = dat & 0x80;
+        dat <<= 1;
+        PIN_WIRE_SCL = HIGH;
+        PIN_WIRE_SCL = LOW;
+    }
+
+    PIN_WIRE_SCL = HIGH;
+    PIN_WIRE_SCL = LOW;
+}
+
+// 从指定地址读取指定长度的数据
+uint8_t WireRequestFrom(uint8_t addr, uint8_t len) {
+    if (len < 2) {
+        return 0;
+    }
+
     // 进入接收模式
     PIN_WIRE_SDA = HIGH;
     PIN_WIRE_SCL = HIGH;
     PIN_WIRE_SDA = LOW;
     PIN_WIRE_SCL = LOW;
-    WireWrite(1 | _address << 1);
-    // 循环 8 次将一个字节读出，先读高再传低位
-    uint_least8_t dat = 0;
-    for (uint_least8_t i = 0; i < 8; i++) {
-        PIN_WIRE_SCL = LOW;
-        _WireDelay();
-        PIN_WIRE_SCL = HIGH;
-        dat <<= 1;
-        if (PIN_WIRE_SDA) {
-            dat++;
-        }
-        _WireDelay();
-    }
-    if (_ack) {
-        // 发出 ACK 信号
-        PIN_WIRE_SCL = LOW;
-        PIN_WIRE_SDA = LOW;
-        _WireDelay();
-        PIN_WIRE_SCL = HIGH;
-        _WireDelay();
-        PIN_WIRE_SCL = LOW;
-        PIN_WIRE_SDA = HIGH;
-    } else {
-        // 发出 NACK 信号
-        PIN_WIRE_SCL = LOW;
-        PIN_WIRE_SDA = HIGH;
-        _WireDelay();
-        PIN_WIRE_SCL = HIGH;
-        _WireDelay();
-        PIN_WIRE_SCL = LOW;
-    }
-    return dat;
-}
+    // 送出读地址
+    WireWrite((_wire_address << 1) | 1);
 
-// I2C 发送 1 字节
-void WireWrite(uint_least8_t dat) {
-    PIN_WIRE_SCL = LOW;
-    // 循环 8 次将一个字节传出，先传高位再传低位
-    for (uint_least8_t j = 0; j < 8; j++) {
-        if ((dat & 0x80) > 0) {
-            PIN_WIRE_SDA = HIGH;
-        } else {
-            PIN_WIRE_SDA = LOW;
-        }
-        dat <<= 1;
-        _WireDelay();
-        PIN_WIRE_SCL = HIGH;
-        _WireDelay();
-        PIN_WIRE_SCL = LOW;
-        _WireDelay();
-    }
-    // 等待 ACK / NACK 应答信号
-    PIN_WIRE_SCL = HIGH;
-    // 等待 SDA 为低电平
-    for (uint_least16_t i = 0;; i++) {
-        // 超时则强制结束 I2C 通信
-        if (i > I2C_TIMEOUT) {
-            WireEndTransmission();
-            return;
-        }
-        // SDA 为低电平时跳出循环
-        if (!PIN_WIRE_SDA) {
-            break;
-        }
-    }
-    PIN_WIRE_SCL = LOW;
+    _wire_address = addr;
+    _wire_remain = len;
+    _wire_status = I2C_RESUME;
+
+    return len;
 }

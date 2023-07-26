@@ -1,9 +1,9 @@
-#include <digital.h>
+#include "framework/digital.h"
 
 // 设定管脚电平
-void digitalWrite(uint_least8_t _pin, uint_least8_t level) {
-    uint_least8_t __hub = _pin / 10, __pin = _pin % 10;
-    static uint_least8_t value;
+void digitalWrite(uint8_t _pin, uint8_t level) {
+    uint8_t __hub = _pin / 10, __pin = _pin % 10;
+    static uint8_t value;
 #define GET_PORT_X_VALUE(port) \
     if (__hub == port) {       \
         value = P##port;       \
@@ -26,9 +26,9 @@ void digitalWrite(uint_least8_t _pin, uint_least8_t level) {
 }
 
 // 读取管脚电平
-uint_least8_t digitalRead(uint_least8_t _pin) {
-    uint_least8_t __hub = _pin / 10, __pin = _pin % 10;
-    static uint_least8_t value;
+uint8_t digitalRead(uint8_t _pin) {
+    uint8_t __hub = _pin / 10, __pin = _pin % 10;
+    static uint8_t value;
 #define GET_PORT_X_VALUE(port) \
     if (__hub == port) {       \
         value = P##port;       \
@@ -40,11 +40,11 @@ uint_least8_t digitalRead(uint_least8_t _pin) {
 }
 
 // 一次一位移入一个字节数据
-uint_least8_t shiftIn(uint_least8_t dataPin,
-                      uint_least8_t clockPin,
-                      uint_least8_t bitOrder) {
-    uint_least8_t value = 0;
-    for (uint_least8_t i = 0; i < 8; ++i) {
+uint8_t shiftIn(uint8_t dataPin,
+                      uint8_t clockPin,
+                      uint8_t bitOrder) {
+    uint8_t value = 0;
+    for (uint8_t i = 0; i < 8; ++i) {
         digitalWrite(clockPin, HIGH);
         if (bitOrder == LSBFIRST) {
             value |= digitalRead(dataPin) << i;
@@ -57,11 +57,11 @@ uint_least8_t shiftIn(uint_least8_t dataPin,
 }
 
 // 一次移出一个字节数据
-void shiftOut(uint_least8_t dataPin,
-              uint_least8_t clockPin,
-              uint_least8_t bitOrder,
-              uint_least8_t val) {
-    for (uint_least8_t i = 0; i < 8; i++) {
+void shiftOut(uint8_t dataPin,
+              uint8_t clockPin,
+              uint8_t bitOrder,
+              uint8_t val) {
+    for (uint8_t i = 0; i < 8; i++) {
         if (bitOrder == LSBFIRST) {
             digitalWrite(dataPin, !!(val & (1 << i)));
         } else {
@@ -70,4 +70,8 @@ void shiftOut(uint_least8_t dataPin,
         digitalWrite(clockPin, HIGH);
         digitalWrite(clockPin, LOW);
     }
+}
+
+void pinMode(uint8_t _pin, uint8_t mode) {
+    digitalWrite(_pin, mode);
 }

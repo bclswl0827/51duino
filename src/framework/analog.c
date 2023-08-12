@@ -1,9 +1,9 @@
 #include "framework/analog.h"
 
-uint8_t _pwm_enable = 0,  // PWM 功能使能开关
-    _pwm_pin = 0,            // PWM 引脚序号
-    _pwm_timer = 0,          // PWM 中断次数记录
-    _pwm_pulse = 0;          // analogWrite 的 value
+uint8_t _pwm_enable = 0;  // PWM 功能使能开关
+uint8_t _pwm_pin = 0;     // PWM 引脚序号
+uint8_t _pwm_timer = 0;   // PWM 中断次数记录
+uint8_t _pwm_pulse = 0;   // analogWrite 的 value
 
 // 初始化定时器 T0
 void pwmInit() {

@@ -3,8 +3,9 @@
 // #include "framework/analog.h"
 // #include "framework/delay.h"
 // #include "framework/digital.h"
+// #include "framework/spi.h"
 #include "framework/stream.h"
-// #include "framework/wire.h"
+#include "framework/wire.h"
 
 #include "modules/adc/ads1115.h"
 // #include "modules/adc/mcp3421.h"

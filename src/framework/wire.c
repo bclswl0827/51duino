@@ -1,8 +1,8 @@
 #include "framework/wire.h"
 
-uint8_t _wire_address = 0x00,  // 全局变量记录地址
-    _wire_status = I2C_START,  // 继续传输标志
-    _wire_remain = 0;          // 剩余字节数
+uint8_t _wire_address = 0x00;      // 全局变量记录地址
+uint8_t _wire_remain = 0;          // 剩余字节数
+uint8_t _wire_status = I2C_START;  // 继续传输标志
 
 // 初始化 I2C 总线
 void WireBegin() {

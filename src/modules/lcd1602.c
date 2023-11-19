@@ -1,31 +1,31 @@
-#include "modules/lcd/lcd1602.h"
+#include "modules/lcd1602.h"
 
 void LCD1602WriteRegister(uint8_t dat, uint8_t type) {
     uint8_t msb = dat & 0xf0;
     uint8_t lsb = (dat & 0x0f) << 4;
-    WireBeginTransmission(LCD_ADDRESS);
+    Wire_beginTransmission(LCD_ADDRESS);
 
     switch (type) {
         case LCD_CMD:
-            WireWrite(0x00 + msb);
-            WireWrite(0x04 + msb);
-            WireWrite(0x00 + msb);
-            WireWrite(0x00 + lsb);
-            WireWrite(0x04 + lsb);
-            WireWrite(0x00 + lsb);
+            Wire_write(0x00 + msb);
+            Wire_write(0x04 + msb);
+            Wire_write(0x00 + msb);
+            Wire_write(0x00 + lsb);
+            Wire_write(0x04 + lsb);
+            Wire_write(0x00 + lsb);
             break;
         case LCD_DATA:
-            WireWrite(0x01 + msb);
-            WireWrite(0x05 + msb);
-            WireWrite(0x01 + msb);
-            WireWrite(0x01 + lsb);
-            WireWrite(0x05 + lsb);
-            WireWrite(0x01 + lsb);
+            Wire_write(0x01 + msb);
+            Wire_write(0x05 + msb);
+            Wire_write(0x01 + msb);
+            Wire_write(0x01 + lsb);
+            Wire_write(0x05 + lsb);
+            Wire_write(0x01 + lsb);
             break;
     }
 
-    WireEndTransmission();
-    delayMicroseconds(1000);
+    Wire_endTransmission();
+    delayMicroseconds(10);
 }
 
 void LCD1602Clear() {
@@ -33,7 +33,7 @@ void LCD1602Clear() {
 }
 
 void LCD1602Init() {
-    WireBegin();
+    Wire_begin();
     LCD1602WriteRegister(0x02, LCD_CMD);  // 设置四线发送数据
     LCD1602WriteRegister(0x0c, LCD_CMD);  // 设置显示模式
     LCD1602WriteRegister(0x28, LCD_CMD);  // 显示关闭

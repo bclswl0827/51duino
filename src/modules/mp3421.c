@@ -1,12 +1,12 @@
-#include "modules/adc/mcp3421.h"
+#include "modules/mcp3421.h"
 
 void MCP3421Init(enum MCP3421_MODE mode,
                  enum MCP3421_PGA pga,
                  enum MCP3421_DATARATE datarate) {
-    WireBegin();
-    WireBeginTransmission(MCP3421_ADDRESS);
-    WireWrite(0x80 | (mode << 4) | (datarate << 2) | pga);
-    WireEndTransmission();
+    Wire_begin();
+    Wire_beginTransmission(MCP3421_ADDRESS);
+    Wire_write(0x80 | (mode << 4) | (datarate << 2) | pga);
+    Wire_endTransmission();
 }
 
 int16_t MCP3421Read(enum MCP3421_MODE mode,
@@ -16,13 +16,13 @@ int16_t MCP3421Read(enum MCP3421_MODE mode,
         MCP3421Init(mode, pga, datarate);
     }
 
-    WireRequestFrom(MCP3421_ADDRESS, 1);
-    while (WireRead() & 0x80) {
+    Wire_requestFrom(MCP3421_ADDRESS, 1);
+    while (Wire_read() & 0x80) {
         ;
     }
 
-    WireRequestFrom(MCP3421_ADDRESS, 2);
-    return (WireRead() << 8) | WireRead();
+    Wire_requestFrom(MCP3421_ADDRESS, 2);
+    return (Wire_read() << 8) | Wire_read();
 }
 
 float MCP3421ToVoltage(enum MCP3421_DATARATE datarate) {

@@ -1,4 +1,4 @@
-#include "modules/tuner/si5351.h"
+#include "modules/si5351.h"
 
 float _floor(float x) {
     if (x >= 0) {
@@ -11,15 +11,15 @@ float _floor(float x) {
 // 向 SI5351 写入一个字节
 void SI5351WriteRegister(uint8_t reg, uint8_t value) {
     // 传输到指定从机
-    WireBeginTransmission(SI5351_ADDRESS);
-    WireWrite(reg);
-    WireWrite(value & 0xff);
-    WireEndTransmission();
+    Wire_beginTransmission(SI5351_ADDRESS);
+    Wire_write(reg);
+    Wire_write(value & 0xff);
+    Wire_endTransmission();
 }
 
 // 启动 SI5351
 void SI5351Init() {
-    WireBegin();
+    Wire_begin();
 
     // 复位 SI5351
     SI5351WriteRegister(3, 0xFF);

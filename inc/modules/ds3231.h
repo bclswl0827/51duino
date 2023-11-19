@@ -20,6 +20,7 @@ typedef struct {
     uint8_t second;
 } time_t;
 
+void DS3231Init(void);
 void DS3231GetTime(time_t* time);
 void DS3231SetTime(time_t* time);
 

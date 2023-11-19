@@ -1,108 +1,157 @@
 #include "framework/spi.h"
 
-uint8_t _spi_bit_order = MSBFIRST;   // 位顺序
-uint8_t _spi_data_mode = SPI_MODE0;  // 数据模式
+uint8_t __spi_bit_order = MSBFIRST;   // 位顺序
+uint8_t __spi_data_mode = SPI_MODE0;  // 数据模式
 
-void SPIBegin() {
-    PIN_SPI_MOSI = LOW;
-    PIN_SPI_MISO = LOW;
+void __spi_setSCK(uint8_t val) {
+    SCK = val ? 1 : 0;
 }
 
-void SPIEnd() {
+uint8_t __spi_getSCK() {
+    return SCK;
+}
+
+void __spi_setMOSI(uint8_t val) {
+    MOSI = val ? 1 : 0;
+}
+
+uint8_t __spi_getMOSI() {
+    return MOSI;
+}
+
+void __spi_setMISO(uint8_t val) {
+    MISO = val ? 1 : 0;
+}
+
+uint8_t __spi_getMISO() {
+    return MISO;
+}
+
+spi_settings_t* SPISettings(uint32_t speed,
+                            uint8_t bitOrder,
+                            uint8_t dataMode) {
+    spi_settings_t settings;
+    settings.speed = speed;
+    settings.bitOrder = bitOrder;
+    settings.dataMode = dataMode;
+
+    return &settings;
+}
+
+void __spi_begin() {
+    __spi_setMOSI(0);
+    __spi_setMISO(0);
+}
+
+void __spi_end() {
     ;
 }
 
-void SPISetDataMode(uint8_t mode) {
-    _spi_data_mode = mode;
+void __spi_setDataMode(uint8_t mode) {
+    __spi_data_mode = mode;
 }
 
-void SPISetBitOrder(uint8_t order) {
-    _spi_bit_order = order;
+void __spi_setBitOrder(uint8_t order) {
+    __spi_bit_order = order;
 }
 
-spi_t* SPISettings(uint32_t speed, uint8_t bitOrder, uint8_t dataMode) {
-    spi_t* settings = (spi_t*)malloc(sizeof(spi_t));
-    settings->speed = speed;
-    settings->bitOrder = bitOrder;
-    settings->dataMode = dataMode;
-
-    return settings;
+void __spi_beginTransaction(spi_settings_t* settings) {
+    __spi_bit_order = settings->bitOrder;
+    __spi_data_mode = settings->dataMode;
 }
 
-void SPIBeginTransaction(spi_t* settings) {
-    _spi_bit_order = settings->bitOrder;
-    _spi_data_mode = settings->dataMode;
-}
-
-uint8_t SPITransfer(uint8_t dat) {
+uint8_t __spi_transfer(uint8_t dat) {
     uint8_t rx_dat = 0;
 
-    switch (_spi_data_mode) {
+    switch (__spi_data_mode) {
         case SPI_MODE0:
-            PIN_SPI_SCK = LOW;
+            __spi_setSCK(0);
+
             for (uint8_t i = 0; i < 8; i++) {
-                rx_dat = _spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
-                rx_dat |= _spi_bit_order == MSBFIRST ? PIN_SPI_MISO
-                                                     : PIN_SPI_MISO << 7;
+                rx_dat =
+                    __spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
 
-                PIN_SPI_MOSI =
-                    _spi_bit_order == MSBFIRST ? dat & 0x80 : (dat & 0x01) << 7;
-                dat = _spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+                uint8_t miso_state = __spi_getMISO();
+                rx_dat |=
+                    __spi_bit_order == MSBFIRST ? miso_state : miso_state << 7;
 
-                PIN_SPI_SCK = HIGH;
-                PIN_SPI_SCK = LOW;
+                __spi_setMOSI(__spi_bit_order == MSBFIRST ? dat & 0x80
+                                                          : (dat & 0x01) << 7);
+                dat = __spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+
+                __spi_setSCK(1);
+                __spi_setSCK(0);
             }
+
             break;
         case SPI_MODE1:
-            PIN_SPI_SCK = LOW;
+            __spi_setSCK(0);
+
             for (uint8_t i = 0; i < 8; i++) {
-                PIN_SPI_MOSI =
-                    _spi_bit_order == MSBFIRST ? dat & 0x80 : (dat & 0x01) << 7;
-                dat = _spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+                __spi_setMOSI(__spi_bit_order == MSBFIRST ? dat & 0x80
+                                                          : (dat & 0x01) << 7);
 
-                PIN_SPI_SCK = HIGH;
-                rx_dat = _spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
-                rx_dat |= _spi_bit_order == MSBFIRST ? PIN_SPI_MISO
-                                                     : PIN_SPI_MISO << 7;
+                dat = __spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+                __spi_setSCK(1);
 
-                PIN_SPI_SCK = LOW;
+                rx_dat =
+                    __spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
+
+                uint8_t miso_state = __spi_getMISO();
+                rx_dat |=
+                    __spi_bit_order == MSBFIRST ? miso_state : miso_state << 7;
+
+                __spi_setSCK(0);
             }
+
             break;
         case SPI_MODE2:
-            PIN_SPI_SCK = HIGH;
+            __spi_setSCK(1);
+
             for (uint8_t i = 0; i < 8; i++) {
-                rx_dat = _spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
-                rx_dat |= _spi_bit_order == MSBFIRST ? PIN_SPI_MISO
-                                                     : PIN_SPI_MISO << 7;
+                rx_dat =
+                    __spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
 
-                PIN_SPI_MOSI =
-                    _spi_bit_order == MSBFIRST ? dat & 0x80 : (dat & 0x01) << 7;
-                dat = _spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+                uint8_t miso_state = __spi_getMISO();
+                rx_dat |=
+                    __spi_bit_order == MSBFIRST ? miso_state : miso_state << 7;
 
-                PIN_SPI_SCK = LOW;
-                PIN_SPI_SCK = HIGH;
+                __spi_setMOSI(__spi_bit_order == MSBFIRST ? dat & 0x80
+                                                          : (dat & 0x01) << 7);
+
+                dat = __spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+
+                __spi_setSCK(0);
+                __spi_setSCK(1);
             }
+
             break;
         case SPI_MODE3:
-            PIN_SPI_SCK = HIGH;
+            __spi_setSCK(1);
+
             for (uint8_t i = 0; i < 8; i++) {
-                PIN_SPI_MOSI =
-                    _spi_bit_order == MSBFIRST ? dat & 0x80 : (dat & 0x01) << 7;
-                dat = _spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+                __spi_setMOSI(__spi_bit_order == MSBFIRST ? dat & 0x80
+                                                          : (dat & 0x01) << 7);
 
-                PIN_SPI_SCK = LOW;
-                rx_dat = _spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
-                rx_dat |= _spi_bit_order == MSBFIRST ? PIN_SPI_MISO
-                                                     : PIN_SPI_MISO << 7;
+                dat = __spi_bit_order == MSBFIRST ? dat << 1 : dat >> 1;
+                __spi_setSCK(0);
 
-                PIN_SPI_SCK = HIGH;
+                rx_dat =
+                    __spi_bit_order == MSBFIRST ? rx_dat << 1 : rx_dat >> 1;
+
+                uint8_t miso_state = __spi_getMISO();
+                rx_dat |=
+                    __spi_bit_order == MSBFIRST ? miso_state : miso_state << 7;
+
+                __spi_setSCK(1);
             }
+
             break;
     }
 
     return rx_dat;
 }
 
-void SPIEndTransaction() {
+void __spi_endTransaction() {
     ;
 }

@@ -1,7 +1,25 @@
-#ifndef __MODULE_OLED_FONT_H__
-#define __MODULE_OLED_FONT_H__
+#ifndef __MODULE_OLED_SSD1306__H
+#define __MODULE_OLED_SSD1306__H
+
+#ifndef __SDCC
+#error "This header file must be used for SDCC compiler !"
+#endif
 
 #include <stdint.h>
+
+#include "framework/wire.h"
+
+#define OLED_CMD 0         // 写命令
+#define OLED_DATA 1        // 写数据
+#define OLED_COLUMN 128    // OLED 屏幕列数
+#define OLED_ADDRESS 0x3c  // OLED 屏幕地址
+
+void SSD1306Init(void);
+void SSD1306Enable(void);
+void SSD1306Disable(void);
+void SSD1306Clear(void);
+void SSD1306Write(uint8_t x, uint8_t y, uint8_t c);
+void SSD1306Print(uint8_t x, uint8_t y, uint8_t* buf);
 
 // 点阵字体定义
 static const uint8_t F8X6[][6] = {
@@ -97,14 +115,6 @@ static const uint8_t F8X6[][6] = {
     {0x00, 0x1C, 0xA0, 0xA0, 0xA0, 0x7C},  // y
     {0x00, 0x44, 0x64, 0x54, 0x4C, 0x44},  // z
     {0x14, 0x14, 0x14, 0x14, 0x14, 0x14}   // ~
-};
-
-// 中文定义
-static const uint8_t chinese[][32] = {
-    {0x40, 0xC0, 0x40, 0x40, 0x40, 0x60, 0x1C, 0x03, 0x1C, 0x60, 0x40, 0x40,
-     0x40, 0xC0, 0x40, 0x00},
-    {0x00, 0x00, 0x41, 0x39, 0x26, 0x10, 0x10, 0x08, 0x08, 0x10, 0x26, 0x39,
-     0x41, 0x00, 0x00, 0x00}, /*"☆",2*/
 };
 
 #endif

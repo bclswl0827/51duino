@@ -1,17 +1,17 @@
-#include "modules/oled/ssd1306.h"
+#include "modules/ssd1306.h"
 
 void SSD1306WriteRegister(uint8_t dat, uint8_t type) {
-    WireBeginTransmission(OLED_ADDRESS);
+    Wire_beginTransmission(OLED_ADDRESS);
     switch (type) {
         case OLED_DATA:
-            WireWrite(0x40);
+            Wire_write(0x40);
             break;
         case OLED_CMD:
-            WireWrite(0x00);
+            Wire_write(0x00);
             break;
     }
-    WireWrite(dat);
-    WireEndTransmission();
+    Wire_write(dat);
+    Wire_endTransmission();
 }
 
 void SSD1306SetPosition(uint8_t x, uint8_t y) {
@@ -22,7 +22,7 @@ void SSD1306SetPosition(uint8_t x, uint8_t y) {
 
 // 屏幕初始化
 void SSD1306Init() {
-    WireBegin();
+    Wire_begin();
     // 设置显示关
     SSD1306WriteRegister(0xAE, OLED_CMD);
     // 设置低列地址
@@ -127,31 +127,6 @@ void SSD1306Print(uint8_t x, uint8_t y, uint8_t* buf) {
             x = 0;
             // y 轴往下提行
             y += 1;
-        }
-    }
-}
-
-void SSD1306Chinese(uint8_t offset,  // 从左往右偏移量
-                    uint8_t y,       // y 轴坐标
-                    uint8_t gap      // 文字间距
-) {
-    // 若文字间距小于 14 则按照 14 对待
-    if (gap < 14) {
-        gap = 14;
-    }
-    // 循环次数取决于 chinese 数组长度
-    for (uint16_t x, i = 0; i < sizeof(chinese) / sizeof(chinese[0]) / 2; i++) {
-        // 计算从左到右偏移量
-        x = offset + gap * i;
-        // 中文字上半部分
-        SSD1306SetPosition(x, y);
-        for (uint8_t j = 0; j < gap; j++) {
-            SSD1306WriteRegister(chinese[2 * i][j], OLED_DATA);
-        }
-        // 中文字下半部分
-        SSD1306SetPosition(x, y + 1);
-        for (uint8_t j = 0; j < gap; j++) {
-            SSD1306WriteRegister(chinese[2 * i + 1][j], OLED_DATA);
         }
     }
 }

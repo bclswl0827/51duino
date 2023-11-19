@@ -1,103 +1,134 @@
 #include "framework/wire.h"
 
-uint8_t _wire_address = 0x00;      // 全局变量记录地址
-uint8_t _wire_remain = 0;          // 剩余字节数
-uint8_t _wire_status = I2C_START;  // 继续传输标志
+// Slave address
+static uint8_t __wire_address = 0x00;
+// Bytes remaining
+static uint8_t __wire_remain = 0;
+// Transmission status
+static uint8_t __wire_status = WIRE_START;
 
-// 初始化 I2C 总线
-void WireBegin() {
-    PIN_WIRE_SDA = LOW;
-    PIN_WIRE_SCL = LOW;
+// Set SDA pin state
+void __wire_setSDA(uint8_t val) {
+    SDA = val ? 1 : 0;
 }
 
-// 启动 I2C 传输
-void WireBeginTransmission(uint8_t addr) {
-    _wire_address = addr;
-    // 发出启动信号
-    PIN_WIRE_SDA = HIGH;
-    PIN_WIRE_SCL = HIGH;
-    PIN_WIRE_SDA = LOW;
-    PIN_WIRE_SCL = LOW;
-    // 发送设备地址
-    WireWrite(addr << 1);
+// Get SDA pin state
+uint8_t __wire_getSDA() {
+    return SDA;
 }
 
-// 结束 I2C 传输
-uint8_t WireEndTransmission() {
-    PIN_WIRE_SDA = LOW;
-    PIN_WIRE_SCL = HIGH;
-    PIN_WIRE_SDA = HIGH;
+// Set SCL pin state
+void __wire_setSCL(uint8_t val) {
+    SCL = val ? 1 : 0;
+}
+
+// Get SCL pin state
+uint8_t __wire_getSCL() {
+    return SCL;
+}
+
+// Initialize I2C bus
+void __wire_begin() {
+    __wire_setSDA(0);
+    __wire_setSCL(0);
+}
+
+// Begin I2C transmission
+void __wire_beginTransmission(uint8_t addr) {
+    __wire_address = addr;
+    // Start signal
+    __wire_setSDA(1);
+    __wire_setSCL(1);
+    __wire_setSDA(0);
+    __wire_setSCL(0);
+    // Send slave address
+    __wire_write(addr << 1);
+}
+
+// End I2C transmission
+uint8_t __wire_endTransmission() {
+    __wire_setSDA(0);
+    __wire_setSCL(1);
+    __wire_setSDA(1);
     return 1;
 }
 
-// I2C 读取 1 字节
-uint8_t WireRead() {
+// I2C read one byte
+uint8_t __wire_read() {
     uint8_t dat = 0;
 
-    if (_wire_status == I2C_START) {
-        // 进入接收模式
-        PIN_WIRE_SDA = HIGH;
-        PIN_WIRE_SCL = HIGH;
-        PIN_WIRE_SDA = LOW;
-        PIN_WIRE_SCL = LOW;
-        // 送出读地址
-        WireWrite((_wire_address << 1) | 1);
+    if (__wire_status == WIRE_START) {
+        // Receive mode
+        __wire_setSDA(1);
+        __wire_setSCL(1);
+        __wire_setSDA(0);
+        __wire_setSCL(0);
+        // Send slave read address
+        __wire_write((__wire_address << 1) | 1);
     }
 
-    // 剩余字节为 0 时进入重置状态
-    if (!--_wire_remain) {
-        _wire_status = I2C_START;
+    // Reset status if all bytes have been read
+    if (!--__wire_remain) {
+        __wire_status = WIRE_START;
     }
 
-    // 循环 8 次将一个字节读出，先读高再传低位
-    PIN_WIRE_SDA = HIGH;
+    // Read one byte
+    __wire_setSDA(1);
     for (uint8_t i = 0; i < 8; i++) {
         dat <<= 1;
-        PIN_WIRE_SCL = HIGH;
-        dat |= PIN_WIRE_SDA;
-        PIN_WIRE_SCL = LOW;
+        __wire_setSCL(1);
+        dat |= __wire_getSDA();
+        __wire_setSCL(0);
     }
 
-    // 存在剩余字节则发送 ACK，否则为 NACK
-    PIN_WIRE_SDA = _wire_remain ? LOW : HIGH;
-    PIN_WIRE_SCL = HIGH;
-    PIN_WIRE_SCL = LOW;
+    // ACK if more bytes are to be read
+    if (!!__wire_remain) {
+        __wire_setSDA(0);
+    } else {
+        __wire_setSDA(1);
+    }
+    __wire_setSCL(1);
+    __wire_setSCL(0);
 
     return dat;
 }
 
-// I2C 发送 1 字节
-void WireWrite(uint8_t dat) {
-    // 循环 8 次将一个字节传出，先传高位再传低位
-    PIN_WIRE_SCL = LOW;
+// I2C Send one byte
+void __wire_write(uint8_t dat) {
+    // Send one byte
+    __wire_setSCL(0);
     for (uint8_t i = 0; i < 8; i++) {
-        PIN_WIRE_SDA = dat & 0x80;
+        if (dat & 0x80) {
+            __wire_setSDA(1);
+        } else {
+            __wire_setSDA(0);
+        }
         dat <<= 1;
-        PIN_WIRE_SCL = HIGH;
-        PIN_WIRE_SCL = LOW;
+        __wire_setSCL(1);
+        __wire_setSCL(0);
     }
 
-    PIN_WIRE_SCL = HIGH;
-    PIN_WIRE_SCL = LOW;
+    __wire_setSCL(1);
+    __wire_setSCL(0);
 }
 
-// 从指定地址读取指定长度的数据
-uint8_t WireRequestFrom(uint8_t addr, uint8_t len) {
+// Read specified length of data from specified address
+uint8_t __wire_requestFrom(uint8_t addr, uint8_t len) __reentrant {
     if (len < 2) {
         return 0;
     }
 
-    // 进入接收模式
-    PIN_WIRE_SDA = HIGH;
-    PIN_WIRE_SCL = HIGH;
-    PIN_WIRE_SDA = LOW;
-    PIN_WIRE_SCL = LOW;
-    // 送出读地址
-    WireWrite((_wire_address << 1) | 1);
+    // Receive mode
+    __wire_setSDA(1);
+    __wire_setSCL(1);
+    __wire_setSDA(0);
+    __wire_setSCL(0);
+    // Send slave read address
+    __wire_write((__wire_address << 1) | 1);
 
-    _wire_address = addr;
-    _wire_remain = len;
-    _wire_status = I2C_RESUME;
+    __wire_address = addr;
+    __wire_remain = len;
+    __wire_status = WIRE_RESUME;
 
     return len;
 }

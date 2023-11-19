@@ -1,29 +1,29 @@
-#include "modules/adc/ads1115.h"
+#include "modules/ads1115.h"
 
 void ADS1115WriteRegister(uint8_t reg, uint16_t value) {
-    WireBeginTransmission(ADS1115_ADDRESS);
-    WireWrite(reg);
-    WireWrite((uint8_t)(value >> 8));
-    WireWrite(value);
-    WireEndTransmission();
+    Wire_beginTransmission(ADS1115_ADDRESS);
+    Wire_write(reg);
+    Wire_write((uint8_t)(value >> 8));
+    Wire_write(value);
+    Wire_endTransmission();
 }
 
 uint16_t ADS1115ReadRegister(uint8_t reg) {
-    WireBeginTransmission(ADS1115_ADDRESS);
-    WireWrite(reg);
-    WireEndTransmission();
+    Wire_beginTransmission(ADS1115_ADDRESS);
+    Wire_write(reg);
+    Wire_endTransmission();
 
-    WireRequestFrom(ADS1115_ADDRESS, 2);
-    return (WireRead() << 8) | WireRead();
+    Wire_requestFrom(ADS1115_ADDRESS, 2);
+    return (Wire_read() << 8) | Wire_read();
 }
 
 uint8_t ADS1115IsConversionReady() {
     uint16_t val = ADS1115ReadRegister(ADS1115_REG_CONFIG);
-    return (val & ADS1115_OS_NOT_BUSY) > 0;
+    return (val & ADS1115_OS_FREE) > 0;
 }
 
 void ADS1115Init() {
-    WireBegin();
+    Wire_begin();
 }
 
 int16_t ADS1115Read(enum ADS1115_MUX mux,
@@ -33,18 +33,18 @@ int16_t ADS1115Read(enum ADS1115_MUX mux,
                     enum ADS1115_COMP_POL compPol,
                     enum ADS1115_COMP_LATCH compLatch,
                     enum ADS1115_COMP_QUEUE compQueue) {
-    uint16_t config = ADS1115_OS_START_SINGLE;
-    config |= mux;
-    config |= pga;
-    config |= ADS1115_MODE_SINGLE;
-    config |= datarate;
-    config |= compMode;
-    config |= compPol;
-    config |= compLatch;
-    config |= compQueue;
+    uint16_t config = (uint16_t)ADS1115_OS_START_SINGLE << 15;
+    config |= (uint16_t)mux << 12;
+    config |= (uint16_t)pga << 9;
+    config |= (uint16_t)ADS1115_MODE_SINGLE << 8;
+    config |= (uint16_t)datarate << 5;
+    config |= (uint16_t)compMode << 4;
+    config |= (uint16_t)compPol << 3;
+    config |= (uint16_t)compLatch << 2;
+    config |= (uint16_t)compQueue;
     ADS1115WriteRegister(ADS1115_REG_CONFIG, config);
 
-    while (!ADS1115IsConversionReady()) {
+    while (ADS1115IsConversionReady() == ADS1115_OS_BUSY) {
         ;
     }
 

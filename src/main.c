@@ -1,38 +1,74 @@
+#include <Arduino.h>
 #include <string.h>
+#include "modules/ads1115.h"
 
-// #include "framework/analog.h"
-// #include "framework/delay.h"
-// #include "framework/digital.h"
-// #include "framework/spi.h"
-#include "framework/stream.h"
-#include "framework/wire.h"
+#include "modules/ads1256.h"
 
-#include "modules/adc/ads1115.h"
-// #include "modules/adc/mcp3421.h"
-// #include "modules/adc/pcf8591.h"
-// #include "modules/lcd/lcd1602.h"
-// #include "modules/oled/ssd1306.h"
-// #include "modules/rtc/ds3231.h"
-// #include "modules/temp/lm75a.h"
-// #include "modules/tuner/si5351.h"
+// ADC sampling rate (maximum SAMPLE_RATE_30000_SPS)
+#define SAMPLE_RATE SAMPLE_RATE_2000_SPS
+// ADC gain rate (maximum GAIN_RATE_64X)
+#define GAIN_RATE GAIN_RATE_2X
+// ADC analog input buffer
+#define ADC_BUFFER ENABLE
+// ADC analog input calibration
+#define ADC_CALIBRATION ENABLE
+// Serial baud rate
+#define SERIAL_BAUD 57600
+// Data packet size
+#define PACKET_SIZE 6
 
-// 数据帧同步字节
-#define SYNC_WORD 0x8A
+// Reset word
+#define RESET_WORD 0x61
 
-// 传感器数据结构体
+// Syncing bytes
+const uint8_t SYNC_WORD[] = {
+    0xFC,
+    0x1B,
+};
+// Responding bytes
+const uint8_t ACK_WORD[] = {
+    0xFC,
+    0x2B,
+};
+
 typedef struct {
-    float AIN[4];
-    uint8_t Checksum;
+    int32_t EHZ[PACKET_SIZE];
+    int32_t EHE[PACKET_SIZE];
+    int32_t EHN[PACKET_SIZE];
+    uint8_t Checksum[3];
 } sensor_t;
 
-// 计算校验和
-uint8_t getChecksum(float* dat) {
+uint8_t shouldReset() {
+    uint8_t gain = ADS1256GetGain();
+    uint8_t sample = ADS1256GetSample();
+    if (gain != GAIN_RATE || sample != SAMPLE_RATE) {
+        return 1;
+    }
+
+    uint8_t buffer, calibration;
+    ADS1256GetStatus(&buffer, &calibration);
+    if (buffer != ADC_BUFFER || calibration != ADC_CALIBRATION) {
+        return 1;
+    }
+
+    return Serial_available() && Serial_read() == RESET_WORD;
+}
+
+int32_t getRawValue(int32_t value) {
+    if (value >> 23) {
+        value -= 16777216;
+    }
+
+    return value;
+}
+
+uint8_t getChecksum(int32_t* array, uint32_t size) {
     uint8_t checksum = 0;
 
-    for (uint8_t i = 0; i < 4; i++) {
-        uint8_t* bytes = (uint8_t*)&dat[i];
+    for (uint32_t i = 0; i < size; i++) {
+        uint8_t* bytes = (uint8_t*)&array[i];
 
-        for (uint8_t j = 0; j < sizeof(float); j++) {
+        for (uint8_t j = 0; j < sizeof(int32_t); j++) {
             checksum ^= bytes[j];
         }
     }
@@ -40,47 +76,86 @@ uint8_t getChecksum(float* dat) {
     return checksum;
 }
 
-// 发送传感器数据
-void sendSensorData(sensor_t* dat) {
-    uint8_t dataBytes[sizeof(sensor_t)];
-    memcpy(dataBytes, dat, sizeof(sensor_t));
-
-    for (uint8_t i = 0; i < sizeof(sensor_t); i++) {
-        SerialWrite(dataBytes[i]);
+void blinkLED(uint8_t times, uint16_t interval) {
+    for (uint8_t i = 0; i < times; i++) {
+        digitalWrite(20, HIGH);
+        delay(interval);
+        digitalWrite(20, LOW);
+        delay(interval);
     }
 }
 
-void main() {
-    sensor_t dat;
-    SerialBegin(19200);
+void initADC() {
+    ADS1256Begin();
+    ADS1256Reset();
+    ADS1256SetGain(GAIN_RATE);
+    ADS1256SetSample(SAMPLE_RATE);
+    ADS1256SetStatus(ADC_BUFFER, ADC_CALIBRATION);
+}
 
-    ADS1115Init();
-    float f = ADS1115ToVoltage(ADS1115_PGA_4_096V);
+void setup() {
+    Serial_begin(SERIAL_BAUD);
+    blinkLED(3, 50);
 
-    while (1) {
-        dat.AIN[0] =
-            f * ADS1115Read(ADS1115_MUX_SINGLE_0_GND, ADS1115_PGA_4_096V,
-                            ADS1115_DATARATE_860, ADS1115_COMP_MODE_WINDOW,
-                            ADS1115_COMP_POL_ACTIVE_LOW, ADS1115_COMP_NON_LATCH,
-                            ADS1115_COMP_QUEUE_DISABLE);
-        dat.AIN[1] =
-            f * ADS1115Read(ADS1115_MUX_SINGLE_1_GND, ADS1115_PGA_4_096V,
-                            ADS1115_DATARATE_860, ADS1115_COMP_MODE_WINDOW,
-                            ADS1115_COMP_POL_ACTIVE_LOW, ADS1115_COMP_NON_LATCH,
-                            ADS1115_COMP_QUEUE_DISABLE);
-        dat.AIN[2] =
-            f * ADS1115Read(ADS1115_MUX_SINGLE_2_GND, ADS1115_PGA_4_096V,
-                            ADS1115_DATARATE_860, ADS1115_COMP_MODE_WINDOW,
-                            ADS1115_COMP_POL_ACTIVE_LOW, ADS1115_COMP_NON_LATCH,
-                            ADS1115_COMP_QUEUE_DISABLE);
-        dat.AIN[3] =
-            f * ADS1115Read(ADS1115_MUX_SINGLE_3_GND, ADS1115_PGA_4_096V,
-                            ADS1115_DATARATE_860, ADS1115_COMP_MODE_WINDOW,
-                            ADS1115_COMP_POL_ACTIVE_LOW, ADS1115_COMP_NON_LATCH,
-                            ADS1115_COMP_QUEUE_DISABLE);
-        dat.Checksum = getChecksum(dat.AIN);
+    initADC();
+    blinkLED(5, 50);
+}
 
-        SerialWrite(SYNC_WORD);
-        sendSensorData(&dat);
+void loop() {
+    sensor_t sensor;
+
+    for (uint16_t i = 0; i < PACKET_SIZE; i++) {
+        // Support runtime reset
+        if (shouldReset()) {
+            initADC();
+            blinkLED(1, 50);
+
+            for (uint8_t i = 0; i < sizeof(ACK_WORD); i++) {
+                Serial_write(ACK_WORD[i]);
+            }
+        }
+
+        ADS1256GetDifferential(ANALOG_INPUT_AIN1, ANALOG_INPUT_AIN2);
+        // Vertical geophone (EHZ)
+        sensor.EHZ[i] = getRawValue(
+            ADS1256GetDifferential(ANALOG_INPUT_AIN3, ANALOG_INPUT_AIN4));
+        // East-West geophone (EHE)
+        sensor.EHE[i] = getRawValue(
+            ADS1256GetDifferential(ANALOG_INPUT_AIN5, ANALOG_INPUT_AIN6));
+        // North-South geophone (EHN)
+        sensor.EHN[i] = getRawValue(
+            ADS1256GetDifferential(ANALOG_INPUT_AIN7, ANALOG_INPUT_AIN8));
+    }
+
+    // Get checksum
+    sensor.Checksum[0] = getChecksum(sensor.EHZ, PACKET_SIZE);
+    sensor.Checksum[1] = getChecksum(sensor.EHE, PACKET_SIZE);
+    sensor.Checksum[2] = getChecksum(sensor.EHN, PACKET_SIZE);
+
+    // Send SYNC_WORD
+    for (uint8_t i = 0; i < sizeof(SYNC_WORD); i++) {
+        Serial_write(SYNC_WORD[i]);
+    }
+    // Send EHZ channel data
+    for (uint8_t i = 0; i < PACKET_SIZE; i++) {
+        for (uint8_t j = 0; j < sizeof(int32_t); j++) {
+            Serial_write(((uint8_t*)&sensor.EHZ[i])[j]);
+        }
+    }
+    // Send EHE channel data
+    for (uint8_t i = 0; i < PACKET_SIZE; i++) {
+        for (uint8_t j = 0; j < sizeof(int32_t); j++) {
+            Serial_write(((uint8_t*)&sensor.EHE[i])[j]);
+        }
+    }
+    // Send EHN channel data
+    for (uint8_t i = 0; i < PACKET_SIZE; i++) {
+        for (uint8_t j = 0; j < sizeof(int32_t); j++) {
+            Serial_write(((uint8_t*)&sensor.EHN[i])[j]);
+        }
+    }
+    // Send channel checksum
+    for (uint8_t i = 0; i < sizeof(sensor.Checksum); i++) {
+        Serial_write(sensor.Checksum[i]);
     }
 }

@@ -39,7 +39,9 @@ void __wire_beginTransmission(uint8_t addr) {
     // Start signal
     __wire_setSDA(1);
     __wire_setSCL(1);
+    delayMicroseconds(5);
     __wire_setSDA(0);
+    delayMicroseconds(5);
     __wire_setSCL(0);
     // Send slave address
     __wire_write(addr << 1);
@@ -49,7 +51,9 @@ void __wire_beginTransmission(uint8_t addr) {
 uint8_t __wire_endTransmission() {
     __wire_setSDA(0);
     __wire_setSCL(1);
+    delayMicroseconds(5);
     __wire_setSDA(1);
+    delayMicroseconds(5);
     return 1;
 }
 
@@ -61,7 +65,9 @@ uint8_t __wire_read() {
         // Receive mode
         __wire_setSDA(1);
         __wire_setSCL(1);
+        delayMicroseconds(5);
         __wire_setSDA(0);
+        delayMicroseconds(5);
         __wire_setSCL(0);
         // Send slave read address
         __wire_write((__wire_address << 1) | 1);
@@ -73,12 +79,13 @@ uint8_t __wire_read() {
     }
 
     // Read one byte
-    __wire_setSDA(1);
     for (uint8_t i = 0; i < 8; i++) {
-        dat <<= 1;
-        __wire_setSCL(1);
-        dat |= __wire_getSDA();
         __wire_setSCL(0);
+        delayMicroseconds(5);
+        __wire_setSCL(1);
+        dat <<= 1;
+        dat |= __wire_getSDA();
+        delayMicroseconds(5);
     }
 
     // ACK if more bytes are to be read
@@ -87,8 +94,13 @@ uint8_t __wire_read() {
     } else {
         __wire_setSDA(1);
     }
+    delayMicroseconds(5);
     __wire_setSCL(1);
+    delayMicroseconds(5);
     __wire_setSCL(0);
+    if (!!__wire_remain) {
+        __wire_setSDA(1);
+    }
 
     return dat;
 }
@@ -105,11 +117,15 @@ void __wire_write(uint8_t dat) {
         }
         dat <<= 1;
         __wire_setSCL(1);
+        delayMicroseconds(5);
         __wire_setSCL(0);
+        delayMicroseconds(5);
     }
 
     __wire_setSCL(1);
+    delayMicroseconds(5);
     __wire_setSCL(0);
+    delayMicroseconds(5);
 }
 
 // Read specified length of data from specified address
@@ -121,7 +137,9 @@ uint8_t __wire_requestFrom(uint8_t addr, uint8_t len) __reentrant {
     // Receive mode
     __wire_setSDA(1);
     __wire_setSCL(1);
+    delayMicroseconds(5);
     __wire_setSDA(0);
+    delayMicroseconds(5);
     __wire_setSCL(0);
     // Send slave read address
     __wire_write((__wire_address << 1) | 1);

@@ -7,7 +7,9 @@
 
 #include <reg52.h>
 #include <stdint.h>
+
 #include "framework/config.h"
+#include "framework/delay.h"
 
 // Continues transmission
 #define WIRE_RESUME 0

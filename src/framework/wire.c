@@ -27,6 +27,41 @@ uint8_t __wire_getSCL() {
     return SCL;
 }
 
+// Delay for I2C bus
+void __wire_delay() {
+    delayMicroseconds(1);
+}
+
+// Send ACK signal
+void __wire_ack() {
+    __wire_setSDA(0);
+    __wire_delay();
+    __wire_setSCL(1);
+    __wire_delay();
+    __wire_setSCL(0);
+    __wire_delay();
+    __wire_setSDA(1);
+}
+
+// Send NACK signal
+void __wire_nack() {
+    __wire_setSDA(1);
+    __wire_delay();
+    __wire_setSCL(1);
+    __wire_delay();
+    __wire_setSCL(0);
+}
+
+// Send start signal
+void __wire_start() {
+    __wire_setSDA(1);
+    __wire_setSCL(1);
+    __wire_delay();
+    __wire_setSDA(0);
+    __wire_delay();
+    __wire_setSCL(0);
+}
+
 // Initialize I2C bus
 void __wire_begin() {
     __wire_setSDA(0);
@@ -37,12 +72,7 @@ void __wire_begin() {
 void __wire_beginTransmission(uint8_t addr) {
     __wire_address = addr;
     // Start signal
-    __wire_setSDA(1);
-    __wire_setSCL(1);
-    delayMicroseconds(1);
-    __wire_setSDA(0);
-    delayMicroseconds(1);
-    __wire_setSCL(0);
+    __wire_start();
     // Send slave address
     __wire_write(addr << 1);
 }
@@ -51,56 +81,39 @@ void __wire_beginTransmission(uint8_t addr) {
 uint8_t __wire_endTransmission() {
     __wire_setSDA(0);
     __wire_setSCL(1);
-    delayMicroseconds(1);
+    __wire_delay();
     __wire_setSDA(1);
-    delayMicroseconds(1);
+    __wire_delay();
     return 1;
 }
 
 // I2C read one byte
 uint8_t __wire_read() {
-    uint8_t dat = 0;
-
     if (__wire_status == WIRE_START) {
         // Receive mode
-        __wire_setSDA(1);
-        __wire_setSCL(1);
-        delayMicroseconds(1);
-        __wire_setSDA(0);
-        delayMicroseconds(1);
-        __wire_setSCL(0);
+        __wire_start();
         // Send slave read address
         __wire_write((__wire_address << 1) | 1);
     }
 
-    // Reset status if all bytes have been read
-    if (!--__wire_remain) {
-        __wire_status = WIRE_START;
-    }
-
     // Read one byte
+    uint8_t dat = 0;
     __wire_setSDA(1);
     for (uint8_t i = 0; i < 8; i++) {
-        delayMicroseconds(1);
-        __wire_setSCL(1);
         dat <<= 1;
+        __wire_setSCL(1);
         dat |= __wire_getSDA();
-        delayMicroseconds(1);
         __wire_setSCL(0);
     }
 
-    // ACK if more bytes are to be read
-    if (!!__wire_remain) {
-        __wire_setSDA(0);
+    // Send NACK if no more bytes are to be read
+    if (__wire_remain + 1 > 1 && __wire_status == WIRE_RESUME) {
+        __wire_ack();
+    } else if (__wire_remain + 1 == 1 && __wire_status == WIRE_RESUME) {
+        __wire_status = WIRE_START;
+        __wire_nack();
     } else {
-        __wire_setSDA(1);
-    }
-    delayMicroseconds(1);
-    __wire_setSCL(1);
-    delayMicroseconds(1);
-    __wire_setSCL(0);
-    if (!!__wire_remain) {
-        __wire_setSDA(1);
+        __wire_nack();
     }
 
     return dat;
@@ -118,11 +131,10 @@ void __wire_write(uint8_t dat) {
         }
         dat <<= 1;
         __wire_setSCL(1);
-        delayMicroseconds(1);
+        __wire_delay();
         __wire_setSCL(0);
-        delayMicroseconds(1);
+        __wire_delay();
     }
-
     __wire_setSCL(1);
     delayMicroseconds(1);
     __wire_setSCL(0);
@@ -136,12 +148,7 @@ uint8_t __wire_requestFrom(uint8_t addr, uint8_t len) __reentrant {
     }
 
     // Receive mode
-    __wire_setSDA(1);
-    __wire_setSCL(1);
-    delayMicroseconds(1);
-    __wire_setSDA(0);
-    delayMicroseconds(1);
-    __wire_setSCL(0);
+    __wire_start();
     // Send slave read address
     __wire_write((__wire_address << 1) | 1);
 

@@ -11,8 +11,6 @@ void MPU6050Init() {
 void MPU6050Read(motion_t* motion) {
     Wire_beginTransmission(MPU6050_ADDRESS);
     Wire_write(0x3B);
-    Wire_endTransmission();
-
     Wire_requestFrom(MPU6050_ADDRESS, 14);
     motion->accX = Wire_read() << 8 | Wire_read();
     motion->accY = Wire_read() << 8 | Wire_read();
@@ -21,6 +19,8 @@ void MPU6050Read(motion_t* motion) {
     motion->gyroX = Wire_read() << 8 | Wire_read();
     motion->gyroY = Wire_read() << 8 | Wire_read();
     motion->gyroZ = Wire_read() << 8 | Wire_read();
+
+    Wire_endTransmission();
 }
 
 float MPU6050GetAcc(int16_t dat) {

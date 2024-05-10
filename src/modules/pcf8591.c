@@ -7,10 +7,11 @@ void PCF8591Init() {
 uint8_t PCF8591Read(enum PCF8591_CHANNEL channel) {
     Wire_beginTransmission(PCF8591_ADDRESS);
     Wire_write(0x40 | channel);
-    Wire_endTransmission();
-
     Wire_requestFrom(PCF8591_ADDRESS, 1);
-    return Wire_read();
+    uint8_t val = Wire_read();
+
+    Wire_endTransmission();
+    return val;
 }
 
 float PCF8591ToVoltage() {

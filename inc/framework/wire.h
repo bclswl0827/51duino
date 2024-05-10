@@ -21,7 +21,7 @@ uint8_t __wire_read(void);
 void __wire_write(uint8_t dat);
 uint8_t __wire_endTransmission(void);
 void __wire_beginTransmission(uint8_t addr);
-uint8_t __wire_requestFrom(uint8_t addr, uint8_t len) __reentrant;
+uint8_t __wire_requestFrom(uint8_t addr, uint8_t len);
 
 // Use macro to replace function call
 #define Wire_begin() __wire_begin()

@@ -11,10 +11,11 @@ void ADS1115WriteRegister(uint8_t reg, uint16_t value) {
 uint16_t ADS1115ReadRegister(uint8_t reg) {
     Wire_beginTransmission(ADS1115_ADDRESS);
     Wire_write(reg);
-    Wire_endTransmission();
-
     Wire_requestFrom(ADS1115_ADDRESS, 2);
-    return (Wire_read() << 8) | Wire_read();
+    uint16_t val = (Wire_read() << 8) | Wire_read();
+
+    Wire_endTransmission();
+    return val;
 }
 
 uint8_t ADS1115IsConversionReady() {

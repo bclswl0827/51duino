@@ -142,7 +142,7 @@ void __wire_write(uint8_t dat) {
 }
 
 // Read specified length of data from specified address
-uint8_t __wire_requestFrom(uint8_t addr, uint8_t len) __reentrant {
+uint8_t __wire_requestFrom(uint8_t addr, uint8_t len) {
     if (len < 2) {
         return 0;
     }

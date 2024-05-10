@@ -18,8 +18,6 @@ void DS3231Init() {
 void DS3231GetTime(time_t* time) {
     Wire_beginTransmission(DS3231_ADDRESS);
     Wire_write(0x00);
-    Wire_endTransmission();
-
     Wire_requestFrom(DS3231_ADDRESS, 7);
     time->second = DS3231BcdToDec(Wire_read() & 0x7F);
     time->minute = DS3231BcdToDec(Wire_read());
@@ -28,6 +26,8 @@ void DS3231GetTime(time_t* time) {
     time->day = DS3231BcdToDec(Wire_read());
     time->month = DS3231BcdToDec(Wire_read());
     time->year = DS3231BcdToDec(Wire_read());
+
+    Wire_endTransmission();
 }
 
 // 设定时间
